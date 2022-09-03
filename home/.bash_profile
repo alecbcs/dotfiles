@@ -1,0 +1,5 @@
+echo PROFILE
+# use .bashrc
+if [ -f ~/.bashrc ]; then
+    . ~/.bashrc
+fi
