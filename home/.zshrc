@@ -90,3 +90,5 @@ export SAVEHIST=10000      # save history after logout
 setopt INC_APPEND_HISTORY  # append into history file
 setopt HIST_IGNORE_DUPS    # save only one command if 2 are same
 setopt EXTENDED_HISTORY    # add timestamp for each entry
+
+export GPG_TTY=$(tty)

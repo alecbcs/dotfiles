@@ -123,3 +123,6 @@ export HISTSIZE=10000
 #------------------------------------------------------------------------
 # Make grep highlight search string in red
 export GREP_OPTIONS='--color=auto'
+
+# Setup GPG
+export GPG_TTY=$(tty)
