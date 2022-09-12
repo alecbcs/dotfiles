@@ -96,15 +96,6 @@ alias ls="ls $LS_OPTIONS"
 alias ll="ls -lh $LS_OPTIONS"
 alias lsla="ls -la $LS_OPTIONS"
 
-# load appropriate dir colors for terminal
-if [ -e "$(which dircolors)" ]; then
-    if [ "$TERM" = "xterm-256color" -a -e ~/.dir_colors.256 ]; then
-        eval $(dircolors ~/.dir_colors.256)
-    else
-        eval $(dircolors ~/.dir_colors)
-    fi
-fi
-
 #------------------------------------------------------------------------
 # Limits and shell settings
 #------------------------------------------------------------------------
