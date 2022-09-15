@@ -19,10 +19,10 @@ function pathadd {
 
     if [ -d "$_pa_new_path" ] && [[ ":$_pa_oldvalue:" != *":$_pa_new_path:"* ]];
     then
-        # convert path to absolute path if it is not one
+        # Convert path to absolute path if it is not one.
         _pa_new_path=$(cd $_pa_new_path && pwd)
 
-        # Add it to the PATH
+        # Add it to the PATH.
         if [ -n "$_pa_oldvalue" ]; then
             eval "export $_pa_varname=\"$_pa_new_path:$_pa_oldvalue\""
         else
@@ -31,7 +31,7 @@ function pathadd {
     fi
 }
 
-# Remove duplicate entries from PATH
+# Remove duplicate entries from PATH.
 function clean_path {
     export PATH=$(echo "$PATH" | awk -F: '{for (i=1;i<=NF;i++) { if ( !x[$i]++ ) printf("%s:",$i); }}')
 }
@@ -43,7 +43,7 @@ function source_if_exists {
     fi
 }
 
-# disable stupid X11 programs that ask for your ssh password
+# Disable stupid X11 programs that ask for your ssh password.
 export SSH_ASKPASS=
 
 source_if_exists /etc/lc.bashrc
@@ -78,6 +78,7 @@ alias e="$EDITOR"
 #------------------------------------------------------------------------
 # Diceware
 #------------------------------------------------------------------------
+# Display diceware words from list based on id.
 function diceware {
     echo $(cat $HOME/.diceware-wordlist.txt | grep $@)
 }
@@ -85,7 +86,7 @@ function diceware {
 #------------------------------------------------------------------------
 # ls options
 #------------------------------------------------------------------------
-# Give ls decent colors and options depending on version
+# Give ls decent colors and options depending on version.
 if ls --color -d . >/dev/null 2>&1; then
     export LS_OPTIONS="--color=auto -F -B"
 elif ls -G -d . >/dev/null 2>&1; then
@@ -101,7 +102,7 @@ alias lsla="ls -la $LS_OPTIONS"
 #------------------------------------------------------------------------
 stty erase '^?'
 
-# use the system's max stack size: prevents crashes on cluster apps
+# use the system's max stack size: prevents crashes on cluster apps.
 ulimit -s $(ulimit -Hs)
 
 # enable/disable core dumps
@@ -119,7 +120,7 @@ export HISTSIZE=10000
 #------------------------------------------------------------------------
 # Other settings
 #------------------------------------------------------------------------
-# Make grep highlight search string in red
+# Make grep highlight search string in red.
 export GREP_OPTIONS='--color=auto'
 
 # Setup GPG

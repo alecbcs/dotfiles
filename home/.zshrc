@@ -23,6 +23,7 @@ alias e="$EDITOR"
 #------------------------------------------------------------------------
 # Diceware
 #------------------------------------------------------------------------
+# Display diceware words from list based on id.
 function diceware {
     echo $(cat $HOME/.diceware-wordlist.txt | grep $@)
 }
@@ -30,7 +31,7 @@ function diceware {
 #------------------------------------------------------------------------
 # ls options
 #------------------------------------------------------------------------
-# Give ls decent colors and options depending on version
+# Give ls decent colors and options depending on version.
 if \ls --color -d . >/dev/null 2>&1; then
     export LS_OPTIONS="--color=auto -F -B"
 elif \ls -G -d . >/dev/null 2>&1; then
@@ -46,7 +47,7 @@ alias lsla="ls -la $LS_OPTIONS"
 #------------------------------------------------------------------------
 stty erase '^?'
 
-# use the system's max stack size: prevents crashes on cluster apps
+# Use the system's max stack size: prevents crashes on cluster apps.
 ulimit -s $(ulimit -Hs)
 
 # enable/disable core dumps
@@ -89,4 +90,5 @@ setopt INC_APPEND_HISTORY  # append into history file
 setopt HIST_IGNORE_DUPS    # save only one command if 2 are same
 setopt EXTENDED_HISTORY    # add timestamp for each entry
 
+# Setup GPG
 export GPG_TTY=$(tty)
