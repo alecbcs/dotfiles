@@ -4,13 +4,13 @@ by Alec Scott (heavily influenced by [Todd Gamblin's Dotfiles](https://github.co
 Check out Todd's well documented repository to create your own set of dotfiles.
 
 ## Table of Contents
-- [Bash Config](//blob/main/home/.bashrc)
-- [Emacs Config](//tree/main/home/.emacs.d)
-  - [Programming Languages](//blob/main/home/.emacs.d/init/init-prog-langs.el)
-  - [Markdown](//blob/main/home/.emacs.d/init/init-markdown.el)
-  - [Org](//blob/main/home/.emacs.d/init/init-org.el)
-  - [Podman](//blob/main/home/.emacs.d/init/init-podman.el)
-  - [LSP](//blob/main/home/.emacs.d/init/init-lsp.el)
-- [Git Config](//blob/main/home/.gitconfig)
-- [ZSH Config](//blob/main/home/.zshrc)
-- [ZSH Env](//blob/main/home/.zshenv)
+- [Bash Config](/alecbcs/dotfiles/blob/main/home/.bashrc)
+- [Emacs Config](/alecbcs/dotfiles/tree/main/home/.emacs.d)
+  - [Programming Languages](/alecbcs/dotfiles/blob/main/home/.emacs.d/init/init-prog-langs.el)
+  - [Markdown](/alecbcs/dotfiles/blob/main/home/.emacs.d/init/init-markdown.el)
+  - [Org](/alecbcs/dotfiles/blob/main/home/.emacs.d/init/init-org.el)
+  - [Podman](/alecbcs/dotfiles/blob/main/home/.emacs.d/init/init-podman.el)
+  - [LSP](/alecbcs/dotfiles/blob/main/home/.emacs.d/init/init-lsp.el)
+- [Git Config](/alecbcs/dotfiles/blob/main/home/.gitconfig)
+- [ZSH Config](/alecbcs/dotfiles/blob/main/home/.zshrc)
+- [ZSH Env](/alecbcs/dotfiles/blob/main/home/.zshenv)
