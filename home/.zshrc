@@ -13,7 +13,7 @@ pathadd "${GOPATH}/bin"
 # Editors
 #------------------------------------------------------------------------
 # Set system editor.
-export EDITOR="emacs -nw"
+export EDITOR="emacsclient -nw -a ''"
 
 # Emacs setup
 # Various emacs aliases.

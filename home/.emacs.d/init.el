@@ -71,6 +71,9 @@
   ;; add additional key binding for ansi-term
   (global-set-key (kbd "C-c C-t") 'ansi-term)
 
+  ;; set tramp to use .ssh/config settings
+  (customize-set-variable 'tramp-use-ssh-controlmaster-options nil)
+
   ;; when using a mac allow option key as meta
   (when (equal system-type 'darwin)
     (setq mac-command-modifier 'super)
@@ -190,6 +193,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(auth-source-save-behavior nil)
  '(package-selected-packages
    '(projector project-root exec-path-from-shell web-mode flycheck flx-ido ido-completing-read+ ido-vertical-mode company sp-ui-doc-frame lsp-ui go-mode lsp-mode visual-fill dired-sidebar visual-fill-column org markdown-mode))
  '(tab-stop-list
