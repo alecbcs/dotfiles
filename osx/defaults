@@ -1,5 +1,31 @@
 #!/bin/sh
 
+#
+# Get readlink -f behavior when readlink doesn't support it
+#
+function readlink_f {
+    _target_file=$1
+
+    cd `dirname $_target_file`
+    _target_file=`basename $_target_file`
+
+    # Iterate down a (possible) chain of symlinks
+    while [ -L "$_target_file" ]; do
+    _target_file=`readlink $_target_file`
+    cd `dirname $_target_file`
+    _target_file=`basename $_target_file`
+    done
+
+    # Compute the canonicalized name by finding the physical path
+    # for the directory we're in and appending the target file.
+    _phys_dir=`pwd -P`
+    _result=$_phys_dir/$_target_file
+    echo $_result
+}
+
+# Directory this script lives in
+script_dir=$(dirname $(readlink_f "$0"))
+
 ###############################################################################
 # General UI/UX                                                               #
 ###############################################################################
@@ -134,6 +160,23 @@ defaults write com.apple.ActivityMonitor ShowCategory -int 0
 # Sort Activity Monitor results by CPU usage
 defaults write com.apple.ActivityMonitor SortColumn -string "CPUUsage"
 defaults write com.apple.ActivityMonitor SortDirection -int 0
+
+###############################################################################
+# Terminal                                                                    #
+###############################################################################
+
+# Enable Secure Keyboard Entry in Terminal.app
+# See: https://security.stackexchange.com/a/47786/8918
+defaults write com.apple.terminal SecureKeyboardEntry -bool true
+
+# Disable the annoying line marks
+defaults write com.apple.Terminal ShowLineMarks -int 0
+
+# Use my Terminal settings in Terminal.app
+open "${script_dir}/default.terminal"
+sleep 1 # Wait a bit to make sure the theme is loaded
+defaults write com.apple.terminal "Default Window Settings" -string "default"
+defaults write com.apple.terminal "Startup Window Settings" -string "default"
 
 ###############################################################################
 # Time Machine                                                                #
