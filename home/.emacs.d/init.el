@@ -39,9 +39,6 @@
   ;; no tool bar
   (tool-bar-mode -1)
 
-  ;; no scroll-bar in graphical app
-  (toggle-scroll-bar -1)
-
   ;; standard tabs to 4 spaces
   (setq-default indent-tabs-mode nil)
   (setq-default tab-width 4)

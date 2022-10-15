@@ -7,9 +7,10 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 # Spack environment and paths
 #------------------------------------------------------------------------
 export SPACK_SKIP_MODULES=1
-source_if_exists $HOME/src/spack/share/spack/setup-env.sh
+export SPACKPATH=$HOME/src/spack/spack
+source_if_exists ${SPACKPATH}/share/spack/setup-env.sh
 
-default_env=~/src/spack/var/spack/environments/main/.spack-env/view
+default_env=${SPACKPATH}/var/spack/environments/main/.spack-env/view
 pathadd $default_env/bin
 
 if [ -x ${default_env}/bin/python ]; then
