@@ -4,30 +4,21 @@
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
 #------------------------------------------------------------------------
-# Spack environment and paths
-#------------------------------------------------------------------------
-export SPACK_SKIP_MODULES=1
-export SPACKPATH=$HOME/src/spack/spack
-source_if_exists ${SPACKPATH}/share/spack/setup-env.sh
-
-default_env=${SPACKPATH}/var/spack/environments/main/.spack-env/view
-pathadd $default_env/bin
-
-if [ -x ${default_env}/bin/python ]; then
-    export SPACK_PYTHON=${default_env}/bin/python
-fi
-
-#------------------------------------------------------------------------
 # Go
 #------------------------------------------------------------------------
 export GOPATH="${HOME}/src/go"
 pathadd "${GOPATH}/bin"
 
 #------------------------------------------------------------------------
+# Python
+#------------------------------------------------------------------------
+pathadd "${HOME}/.local/bin"
+
+#------------------------------------------------------------------------
 # Editors
 #------------------------------------------------------------------------
 # Set system editor.
-export EDITOR="emacsclient -nw -a ''"
+export EDITOR="emacs -nw"
 
 # Emacs setup
 # Various emacs aliases.
