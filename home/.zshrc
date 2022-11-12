@@ -3,6 +3,11 @@
 #------------------------------------------------------------------------
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+# Add brew auto-completions to zsh lookup path
+pathadd FPATH "/opt/homebrew/share/zsh/site-functions:${FPATH}"
+autoload -Uz compinit
+compinit
+
 #------------------------------------------------------------------------
 # Go
 #------------------------------------------------------------------------
