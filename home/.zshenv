@@ -5,7 +5,9 @@ typeset -U path
 # or   pathadd OTHERPATH /path/to/dir  # add to OTHERPATH
 function pathadd {
     if [ -d "$1" ]; then
-        path=($1 "$path[@]")
+        path+=($1 "$path[@]")
+    elif [ -d "$2" ]; then
+        eval "$1+=($2)"
     fi
 }
 

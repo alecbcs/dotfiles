@@ -4,3 +4,5 @@ home/.emacs.d/elpa/
 home/.emacs.d/ido.last
 home/.emacs.d/tramp
 home/.emacs.d/.lsp-session-v1
+home/.emacs.d/.cache/
+home/.emacs.d/url/
