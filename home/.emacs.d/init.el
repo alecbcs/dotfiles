@@ -36,6 +36,9 @@
   ;; no menu bar
   (menu-bar-mode -1)
 
+  ;; allow following symlinks
+  (setq vc-follow-symlinks t)
+
   ;; no tool bar
   (tool-bar-mode -1)
 

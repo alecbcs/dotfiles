@@ -8,6 +8,20 @@ pathadd fpath "/opt/homebrew/share/zsh/site-functions"
 autoload -Uz compinit && compinit
 
 #------------------------------------------------------------------------
+# Spack
+#------------------------------------------------------------------------
+export SPACK_SKIP_MODULES=1
+source_if_exists $HOME/spack/share/spack/setup-env.sh
+
+default_env=~/spack/var/spack/environments/default/.spack-env/view
+pathadd $default_env/bin
+
+#------------------------------------------------------------------------
+# Direnv
+#------------------------------------------------------------------------
+eval "$(direnv hook zsh)"
+
+#------------------------------------------------------------------------
 # Go
 #------------------------------------------------------------------------
 export GOPATH="${HOME}/go"
