@@ -33,6 +33,10 @@
   (set-frame-parameter nil 'ns-appearance 'dark)
   (set-frame-parameter nil 'ns-transparent-titlebar nil)
 
+  ;; scroll one line at a time
+  (setq scroll-step 1)
+  (setq scroll-conservatively 10000)
+
   ;; no menu bar
   (menu-bar-mode -1)
 

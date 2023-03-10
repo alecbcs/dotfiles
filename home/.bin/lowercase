@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+
+# =======================================================================
+# lowercase
+#   by Alec Scott, hi@alecbcs.com
+# =======================================================================
+# Standardize file names in a path by converting them to lowercase with
+# dashes seperating words.
+
+#
+# BEGIN helper functions
+#
+
+# Prints an error message and dies.
+#
+function error() {
+    echo "ERROR: $1" >&2
+    exit 1
+}
+
+#
+# END helper functions
+#
+
+#
+# BEGIN subcommand functions
+#
+
+cmd_default() {
+    local opts selected_line recursive=0
+    opts="$(getopt -o r -l recursive -n "$PROGRAM" -- "$@")"
+    local err=$?
+    eval set -- "$opts"
+    while true; do case $1 in
+        -r|--recursive) recursive=1; shift 2 ;;
+        --) shift; break ;;
+     esac done
+
+    [[ $err -ne 0 || ( $recursive -eq 1 ) ]] && error "Usage: $PROGRAM [--recursive,-r] paths"
+
+    for f in ${1%/}; do
+        if [ -d $f ] && [ $1 == "-r"]; then
+            echo "hello"
+        fi
+
+        mv -v "$f" "`echo $f | tr '[A-Z]' '[a-z]' \
+                             | tr -s '[:blank:]_' '-' \
+                             | tr -d ','`";
+    done
+}
+
+cmd_usage(){
+cat <<-_EOF
+============================================
+= lowercase: standardize file names        =
+=                                          =
+=                                          =
+=                 Alec Scott               =
+=               hi@alecbcs.com             =
+=                                          =
+============================================
+
+Usage:
+    $PROGRAM [--recursive,-r] path...
+        Rename all files in a path to lowercase and replace
+        spaces, and underscores with dashes.
+    $PROGRAM help
+        Show this text.
+
+_EOF
+}
+
+
+#
+# END subcommand functions
+#
+
+PROGRAM="${0##*/}"
+
+case "$1" in
+    help|--help|-h) shift;    cmd_usage "$@" ;;
+    *)                        cmd_default "$@" ;;
+esac
+exit 0

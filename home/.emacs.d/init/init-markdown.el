@@ -8,6 +8,8 @@
 (use-package markdown-mode
   :hook (markdown-mode . visual-line-mode)
   :init
+  (setq markdown-enable-wiki-links t)
+  (setq markdown-link-space-sub-char "-")
   (setq markdown-command "multimarkdown")
   (setq markdown-header-scaling t)
   (setq markdown-header-scaling-values '(2.0 1.7 1.4 1.1 1.0 1.0)))
