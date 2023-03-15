@@ -62,9 +62,9 @@ esac
 # Spack environment and paths
 #------------------------------------------------------------------------
 export SPACK_SKIP_MODULES=1
-source_if_exists $HOME/spack/share/spack/setup-env.sh
+source_if_exists $HOME/src/spack/spack/share/spack/setup-env.sh
 
-default_env=~/spack/var/spack/environments/default/.spack-env/view
+default_env=${HOME}/spack/spack/var/spack/environments/default/.spack-env/view
 pathadd $default_env/bin
 
 #------------------------------------------------------------------------
