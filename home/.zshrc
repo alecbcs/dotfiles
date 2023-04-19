@@ -16,6 +16,9 @@ source_if_exists $HOME/src/spack/spack/share/spack/setup-env.sh
 default_env=~/src/spack/spack/var/spack/environments/default/.spack-env/view
 pathadd $default_env/bin
 
+alias cdsp="cd $SPACK_ROOT"
+alias s="spack"
+
 #------------------------------------------------------------------------
 # Direnv
 #------------------------------------------------------------------------
@@ -38,10 +41,12 @@ pathadd "${HOME}/.local/bin"
 # Editors
 #------------------------------------------------------------------------
 # Set system editor.
-export EDITOR="emacs -nw"
+export EDITOR="emacsclient -nw -a ''"
 
 # Emacs setup
 # Various emacs aliases.
+alias estop="emacsclient -e '(save-buffers-kill-emacs)'"
+
 alias emacs="$EDITOR"
 alias e="$EDITOR"
 

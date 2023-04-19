@@ -9,15 +9,14 @@
 ;; ===========================================================================
 ;; Setup Package Managers
 ;; ===========================================================================
-(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (require 'package)
-(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/"))
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/"))
+(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 (setq package-enable-at-startup nil)
 (package-initialize)
 
-;; Setting up the package manager. Install if missing.
+;; set up the package manager or install if missing
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
@@ -29,10 +28,6 @@
 ;; ===========================================================================
 (use-package emacs
   :config
-  ;; declare window decorations as dark to match with theme
-  (set-frame-parameter nil 'ns-appearance 'dark)
-  (set-frame-parameter nil 'ns-transparent-titlebar nil)
-
   ;; scroll one line at a time
   (setq scroll-step 1)
   (setq scroll-conservatively 10000)
@@ -40,13 +35,16 @@
   ;; no menu bar
   (menu-bar-mode -1)
 
-  ;; allow following symlinks
-  (setq vc-follow-symlinks t)
-
   ;; no tool bar
   (tool-bar-mode -1)
 
-  ;; standard tabs to 4 spaces
+  ;; disable emacs alarms
+  (setq ring-bell-function 'ignore)
+
+  ;; allow following symlinks
+  (setq vc-follow-symlinks t)
+
+  ;; set tabs to equal 4 spaces
   (setq-default indent-tabs-mode nil)
   (setq-default tab-width 4)
   (setq indent-line-function 'insert-tab)
@@ -54,22 +52,10 @@
   ;; remove trailing whitespace
   (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-  ; Comment regions or lines with M-#
-  (defun comment-or-uncomment-region-or-line ()
-    "Comments or uncomments the region or the current line if
-     there's no active region."
-    (interactive)
-    (let (beg end)
-      (if (region-active-p)
-          (setq beg (region-beginning) end (region-end))
-        (setq beg (line-beginning-position) end (line-end-position)))
-      (comment-or-uncomment-region beg end)))
-  (global-set-key [?\M-#] 'comment-or-uncomment-region-or-line)
-
   ;; enfoce a final newline in files
   (setq require-final-newline t)
 
-  ;; Automatically make scripts executable if they have shebant (#!) in them
+  ;; automatically make scripts executable if they have shebant (#!) in them
   (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
 
   ;; add additional key binding for ansi-term
@@ -105,9 +91,6 @@
 ;; ===========================================================================
 ;; Load Additional Configuration Files
 ;; ===========================================================================
-;; load lsp-mode config from file.
-(require 'init-lsp)
-
 ;; load org-mode config from file.
 (require 'init-org)
 
@@ -126,6 +109,11 @@
 ;; ===========================================================================
 ;; Load Additional Packages
 ;; ===========================================================================
+(use-package xclip
+  :ensure t
+  :config
+  (xclip-mode 1))
+
 (use-package simple
   :ensure nil
   :config (column-number-mode +1))
@@ -199,7 +187,7 @@
  ;; If there is more than one, they won't work right.
  '(auth-source-save-behavior nil)
  '(package-selected-packages
-   '(projector project-root exec-path-from-shell web-mode flycheck flx-ido ido-completing-read+ ido-vertical-mode company sp-ui-doc-frame lsp-ui go-mode lsp-mode visual-fill dired-sidebar visual-fill-column org markdown-mode))
+   '(eglot xclip projector project-root exec-path-from-shell web-mode flycheck flx-ido ido-completing-read+ ido-vertical-mode company sp-ui-doc-frame lsp-ui go-mode lsp-mode visual-fill dired-sidebar visual-fill-column org markdown-mode))
  '(tab-stop-list
    '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64 68 72 76 80 84 88 92 96 100 104 108 112 116 120)))
 
