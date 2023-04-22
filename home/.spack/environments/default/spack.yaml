@@ -7,14 +7,16 @@ spack:
   specs:
   - direnv
   - emacs+tls
-  - go
   - gh
+  - go
   - jq
   - py-black
   - py-isort
   - py-pip
   - py-python-lsp-server
   - python
+  - rclone
+  - restic
   view: true
   concretizer:
     unify: true
