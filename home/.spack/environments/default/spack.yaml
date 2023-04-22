@@ -5,16 +5,16 @@
 spack:
   # add packages specs to the `specs` list
   specs:
-    - direnv
-    - emacs+tls
-    - go
-    - gh
-    - jq
-    - py-black
-    - py-isort
-    - py-pip
-    - py-python-lsp-server
-    - python
+  - direnv
+  - emacs+tls
+  - go
+  - gh
+  - jq
+  - py-black
+  - py-isort
+  - py-pip
+  - py-python-lsp-server
+  - python
   view: true
   concretizer:
     unify: true

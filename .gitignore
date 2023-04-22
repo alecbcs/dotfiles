@@ -24,3 +24,9 @@ home/.spack/environments/*/.spack-env/
 home/.spack/environments/*/spack.lock
 home/.spack/packages.yaml
 home/.spack/tcl
+
+# ------------------------------------------------------
+# SSH
+# ------------------------------------------------------
+home/.ssh/known_hosts
+home/.ssh/id*
