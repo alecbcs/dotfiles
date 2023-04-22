@@ -6,6 +6,7 @@
 
 ;;;; Code:
 (use-package markdown-mode
+  :ensure t
   :hook (markdown-mode . visual-line-mode)
   :init
   (setq markdown-enable-wiki-links t)
@@ -15,6 +16,7 @@
   (setq markdown-header-scaling-values '(2.0 1.7 1.4 1.1 1.0 1.0)))
 
 (use-package web-mode
+  :ensure t
   :mode (("\\.html?\\'" . web-mode)
      ("\\.css\\'"   . web-mode)
      ("\\.jsx?\\'"  . web-mode)

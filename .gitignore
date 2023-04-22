@@ -1,8 +1,26 @@
+# ======================================================
+# .dotfiles gitignore
+# ======================================================
+# ------------------------------------------------------
+# Emacs
+# ------------------------------------------------------
+home/.emacs.d/.cache/
+home/.emacs.d/.lsp-session-v1
 home/.emacs.d/auto-save-list/
 home/.emacs.d/bookmarks
 home/.emacs.d/elpa/
 home/.emacs.d/ido.last
+home/.emacs.d/network-security.data
 home/.emacs.d/tramp
-home/.emacs.d/.lsp-session-v1
-home/.emacs.d/.cache/
 home/.emacs.d/url/
+
+# ------------------------------------------------------
+# Spack
+# ------------------------------------------------------
+home/.spack/bootstrap/
+home/.spack/cache/
+home/.spack/darwin/
+home/.spack/environments/*/.spack-env/
+home/.spack/environments/*/spack.lock
+home/.spack/packages.yaml
+home/.spack/tcl

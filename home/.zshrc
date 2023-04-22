@@ -4,7 +4,7 @@
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # Add brew auto-completions to zsh lookup path
-pathadd fpath "/opt/homebrew/share/zsh/site-functions"
+pathadd fpath "${HOMEBREW_PREFIX}/share/zsh/site-functions"
 autoload -Uz compinit && compinit
 
 #------------------------------------------------------------------------
@@ -13,7 +13,7 @@ autoload -Uz compinit && compinit
 export SPACK_SKIP_MODULES=1
 source_if_exists $HOME/src/spack/spack/share/spack/setup-env.sh
 
-default_env=~/src/spack/spack/var/spack/environments/default/.spack-env/view
+default_env=$HOME/.spack/environments/default/.spack-env/view
 pathadd $default_env/bin
 
 alias cdsp="cd $SPACK_ROOT"

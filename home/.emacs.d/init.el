@@ -85,6 +85,7 @@
 ;; ===========================================================================
 ;; import $PATH from the external shell env
 (use-package exec-path-from-shell
+  :ensure t
   :config (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize)))
 
@@ -148,24 +149,29 @@
   :hook (before-save . whitespace-cleanup))
 
 (use-package ido
+  :ensure t
   :config
   (ido-mode +1)
   (setq ido-everywhere t
     ido-enable-flex-matching t))
 
 (use-package ido-vertical-mode
+  :ensure t
   :config
   (ido-vertical-mode +1)
   (setq ido-vertical-define-keys 'C-n-C-p-up-and-down))
 
 (use-package ido-completing-read+
+  :ensure t
   :config (ido-ubiquitous-mode +1))
 
 (use-package flx-ido
+  :ensure t
   :config (flx-ido-mode +1))
 
 (use-package company
   :diminish company-mode
+  :ensure t
   :hook (prog-mode . company-mode)
   :config
   (setq company-minimum-prefix-length 1
@@ -178,6 +184,7 @@
   (define-key company-active-map (kbd "C-p") 'company-select-previous))
 
 (use-package flycheck
+  :ensure t
   :config (global-flycheck-mode +1))
 
 (custom-set-variables
