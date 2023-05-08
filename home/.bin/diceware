@@ -1,0 +1,6 @@
+#!/bin/sh
+#------------------------------------------------------------------------
+# Diceware
+#------------------------------------------------------------------------
+# Display diceware words from list based on id.
+echo $(cat $HOME/.diceware-wordlist.txt | grep -m 1 $@)

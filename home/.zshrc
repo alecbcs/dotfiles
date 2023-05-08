@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------
-# Brew environment and paths
+# Brew
 #------------------------------------------------------------------------
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
@@ -18,6 +18,11 @@ pathadd $default_env/bin
 
 alias cdsp="cd $SPACK_ROOT"
 alias s="spack"
+
+#------------------------------------------------------------------------
+# ~/.bin
+#------------------------------------------------------------------------
+pathadd "{$HOME}/.bin"
 
 #------------------------------------------------------------------------
 # Direnv
@@ -51,12 +56,9 @@ alias emacs="$EDITOR"
 alias e="$EDITOR"
 
 #------------------------------------------------------------------------
-# Diceware
+# GPG Settings
 #------------------------------------------------------------------------
-# Display diceware words from list based on id.
-function diceware {
-    echo $(cat $HOME/.diceware-wordlist.txt | grep $@)
-}
+export GPG_TTY=$(tty)
 
 #------------------------------------------------------------------------
 # ls options
@@ -101,24 +103,22 @@ bindkey '[1;9C' forward-word
 bindkey '[1;9D' backward-word
 
 #------------------------------------------------------------------------
-# Other settings
-#------------------------------------------------------------------------
-
-# Make grep highlight search string in red
-export GREP_OPTIONS='--color=auto'
-
-# make which behave like it does elsewhere
-alias which='whence -p'
-
-#------------------------------------------------------------------------
 # History
 #------------------------------------------------------------------------
-
 export HISTSIZE=10000      # set history size
 export SAVEHIST=10000      # save history after logout
 setopt INC_APPEND_HISTORY  # append into history file
 setopt HIST_IGNORE_DUPS    # save only one command if 2 are same
 setopt EXTENDED_HISTORY    # add timestamp for each entry
 
-# Setup GPG
-export GPG_TTY=$(tty)
+#------------------------------------------------------------------------
+# Other settings
+#------------------------------------------------------------------------
+# make grep highlight search string in red
+alias grep='grep --color=auto'
+
+# make which behave like it does elsewhere
+alias which='whence -p'
+
+# make an alias for getting to the dotfiles git repo
+alias cddot='cd ${HOME}/src/${USER}/dotfiles/'

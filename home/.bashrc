@@ -59,13 +59,18 @@ case $- in
 esac
 
 #------------------------------------------------------------------------
-# Spack environment and paths
+# Spack
 #------------------------------------------------------------------------
 export SPACK_SKIP_MODULES=1
 source_if_exists $HOME/src/spack/spack/share/spack/setup-env.sh
 
 default_env=${HOME}/.spack/environments/default/.spack-env/view
 pathadd $default_env/bin
+
+#------------------------------------------------------------------------
+# ~/.bin
+#------------------------------------------------------------------------
+pathadd "{$HOME}/.bin"
 
 #------------------------------------------------------------------------
 # Go
@@ -90,12 +95,9 @@ alias emacs="$EDITOR"
 alias e="$EDITOR"
 
 #------------------------------------------------------------------------
-# Diceware
+# GPG Settings
 #------------------------------------------------------------------------
-# Display diceware words from list based on id.
-function diceware {
-    echo $(cat $HOME/.diceware-wordlist.txt | grep $@)
-}
+export GPG_TTY=$(tty)
 
 #------------------------------------------------------------------------
 # ls options
@@ -126,16 +128,21 @@ ulimit -c 0
 # Make bash set LINES and COLUMNS after each command.
 shopt -s checkwinsize
 
-# bash history options
-shopt -s histappend              # append instead of overwrite (good for multiple sessions)
-export HISTCONTROL=ignoreboth    # don't save duplicate entries
+#------------------------------------------------------------------------
+# History
+#------------------------------------------------------------------------
+# append instead of overwrite (good for multiple sessions)
+shopt -s histappend
+
+# don't save duplicate entries
+export HISTCONTROL=ignoreboth
 export HISTSIZE=10000
 
 #------------------------------------------------------------------------
 # Other settings
 #------------------------------------------------------------------------
-# Make grep highlight search string in red.
-export GREP_OPTIONS='--color=auto'
+# make grep highlight search string in red.
+alias grep='grep --color=auto'
 
-# Setup GPG
-export GPG_TTY=$(tty)
+# make an alias for getting to the dotfiles git repo
+alias cddot="cd ${HOME}/src/{$USER}/dotfiles/"

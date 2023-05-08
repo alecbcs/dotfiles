@@ -157,8 +157,9 @@
    `(ruby-op-face ((t (:foreground ,tw-pale-org))))
 
    ;; Org
-   `(org-hide ((((background dark)) (:foreground ,tw-bg))))
+   `(org-block ((t (:foreground ,tw-fg))))
    `(org-clock-overlay ((t (:foreground ,tw-wt))))
+   `(org-hide ((((background dark)) (:foreground ,tw-bg))))
    `(outline-4 ((t (:foreground ,tw-bg+8))))
 
    ;; Diff

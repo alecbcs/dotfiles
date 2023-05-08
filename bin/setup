@@ -2,7 +2,7 @@
 function help() {
 echo "======================================================================="
 echo ".dotfiles/bin/setup"
-echo "   by Todd Gamblin, tgamblin@llnl.gov"
+echo "   by Todd Gamblin (tgamblin@llnl.gov) and Alec Scott (alec@llnl.gov)"
 echo "======================================================================="
 echo "This script links and unlinks dotfiles into your home directory."
 echo
@@ -65,9 +65,9 @@ function readlink_f {
 
     # Iterate down a (possible) chain of symlinks
     while [ -L "$_target_file" ]; do
-	_target_file=`readlink $_target_file`
-	cd `dirname $_target_file`
-	_target_file=`basename $_target_file`
+      _target_file=`readlink $_target_file`
+      cd `dirname $_target_file`
+      _target_file=`basename $_target_file`
     done
 
     # Compute the canonicalized name by finding the physical path
@@ -103,6 +103,23 @@ backup_dir=$link_dest/.dotfiles-backup
 rel_repo=\
 $(echo $repo_home | perl -pe "\$s=quotemeta(\"${link_dest}/\"); s/\$s//;")
 
+# check for and parse optional options given to the script
+exclude=()
+
+while getopts ":he:" opt; do
+   case $opt in
+      h) # display Help
+         help
+         exit;;
+      e) # exclude a path
+         exclude+=($OPTARG);;
+     \?) # throw an invalid option error
+         echo "Error: Invalid option"
+         exit;;
+   esac
+done
+
+
 # Command is the symlink through which we ran this script.
 cmd=$(basename $0)
 [[ -n "$cmd" ]] || cmd="help"
@@ -116,6 +133,11 @@ case $cmd in
         for file in $(\ls -A $repo_home); do
             dest="$link_dest/$file"
             src="$rel_repo/$file"
+
+            # Skip the file if it's present as an exclude option
+            if [[ " ${exclude[*]} " =~ " ${file} " ]]; then
+                continue
+            fi
 
             if [ "$cmd" = "link" ]; then
                 # If the file already exists, move it.
