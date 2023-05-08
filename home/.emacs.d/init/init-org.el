@@ -5,9 +5,11 @@
 ;; an opinionated setup.
 
 ;;; Code:
-(use-package org-mode
+(use-package org
   :ensure t
-  :hook (org-mode . visual-line-mode org-indent-mode)
+  :hook
+  (org-mode . visual-line-mode)
+  (org-mode . org-indent-mode)
   :config
   (setq org-log-done t)
   (setq org-edit-timestamp-down-means-later t)

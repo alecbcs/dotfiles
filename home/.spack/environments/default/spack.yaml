@@ -6,7 +6,7 @@ spack:
   # add packages specs to the `specs` list
   specs:
   - direnv
-  - emacs+tls
+  - emacs
   - gh
   - go
   - jq

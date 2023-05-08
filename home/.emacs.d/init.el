@@ -41,6 +41,9 @@
   ;; disable emacs alarms
   (setq ring-bell-function 'ignore)
 
+  ;; don't use customize
+  (setq custom-file null-device)
+
   ;; allow following symlinks
   (setq vc-follow-symlinks t)
 
@@ -186,23 +189,5 @@
 (use-package flycheck
   :ensure t
   :config (global-flycheck-mode +1))
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(auth-source-save-behavior nil)
- '(package-selected-packages
-   '(eglot xclip projector project-root exec-path-from-shell web-mode flycheck flx-ido ido-completing-read+ ido-vertical-mode company sp-ui-doc-frame lsp-ui go-mode lsp-mode visual-fill dired-sidebar visual-fill-column org markdown-mode))
- '(tab-stop-list
-   '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64 68 72 76 80 84 88 92 96 100 104 108 112 116 120)))
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 
 ;;; init.el ends here
