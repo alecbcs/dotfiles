@@ -24,7 +24,7 @@ Now your dotfiles are in a git repo and you can clone them anywhere and keep
 them synchronized.
 
 #### Linking in Your Dotfiles on a New Computer
-```console
+```bash
 alec@laptop dotfiles % ./link
 linking dotfiles
   from: /Users/alecbcs/src/dotfiles/home
@@ -37,7 +37,7 @@ alec@laptop dotfiles % ./link -e .emacs.d
 If something goes wrong, not to worry.  `link` keeps backups in `~/.dotfiles-backup`.  You can run `unlink` to delete all the symbolic links and put your old config files back where they were:
 
 #### Unlinking Your Dotfiles from a Computer
-```console
+```bash
 alec@laptop dotfiles % ./unlink
 unlinking dotfiles
   from: /Users/alecbcs/src/dotfiles/home
