@@ -29,10 +29,8 @@ alec@laptop dotfiles % ./link
 linking dotfiles
   from: /Users/alecbcs/src/dotfiles/home
   into: /Users/alecbcs
-```
 
-#### Excluding a File/Directory from Linking
-```console
+# exclude a file/directory
 alec@laptop dotfiles % ./link -e .emacs.d
 ```
 
