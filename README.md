@@ -1,5 +1,5 @@
 # dotfiles
-by Alec Scott and [Todd Gamblin](https://github.com/tgamblin/dotfiles))
+by Alec Scott and [Todd Gamblin](https://github.com/tgamblin/dotfiles)
 
 ## Table of Contents
 - [Bash Config](/home/.bashrc)
@@ -29,6 +29,11 @@ alec@laptop dotfiles % ./link
 linking dotfiles
   from: /Users/alecbcs/src/dotfiles/home
   into: /Users/alecbcs
+```
+
+#### Excluding a File/Directory from Linking
+```console
+alec@laptop dotfiles % ./link -e .emacs.d
 ```
 
 If something goes wrong, not to worry.  `link` keeps backups in `~/.dotfiles-backup`.  You can run `unlink` to delete all the symbolic links and put your old config files back where they were:
