@@ -7,6 +7,8 @@ spack:
   specs:
   - direnv
   - emacs
+  - fd
+  - fzf
   - gh
   - go
   - jq

@@ -32,6 +32,17 @@ if type direnv &>/dev/null; then
 fi
 
 #------------------------------------------------------------------------
+# FZF
+#------------------------------------------------------------------------
+if type fzf &>/dev/null; then
+    source "${default_env}/share/fzf/shell/key-bindings.zsh"
+    source "${default_env}/share/fzf/shell/completion.zsh"
+fi
+
+export FZF_DEFAULT_COMMAND='fd --exclude .git'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+#------------------------------------------------------------------------
 # Go
 #------------------------------------------------------------------------
 pathadd GOPATH "${HOME}/go"
