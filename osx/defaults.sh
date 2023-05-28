@@ -1,4 +1,10 @@
-#!/bin/sh
+#!/bin/bash
+
+# See also:
+# - https://macos-defaults.com
+# - https://github.com/pawelgrzybek/dotfiles/blob/master/setup-macos.sh
+# - https://github.com/mathiasbynens/dotfiles/blob/master/.macos
+# - https://github.com/tgamblin/dotfiles/blob/master/osx/defaults
 
 #
 # Get readlink -f behavior when readlink doesn't support it
@@ -26,127 +32,220 @@ function readlink_f {
 # Directory this script lives in
 script_dir=$(dirname $(readlink_f "$0"))
 
+set -x
+
 ###############################################################################
 # General UI/UX                                                               #
 ###############################################################################
 
-# Use function keys as standard function keys.
+# use function keys as standard function keys
 defaults write com.apple.keyboard.fnState -int 1
+
+# dynamically show scrollbars
+defaults write NSGlobalDomain AppleShowScrollBars -string "WhenScrolling"
+# possible values: `WhenScrolling`, `Automatic` and `Always`
+
+# save to disk (not to iCloud) by default
+defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
+
+# disable resume system-wide
+defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
+
+# disable auto-correct
+defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 
 ###############################################################################
 # Trackpad, mouse, keyboard                                                   #
 ###############################################################################
 
-# Enable tap to click for this user and for the login screen
+# enable tap to click for this user and for the login screen
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
 defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 
-# Turn on secondary click with two fingers
+# turn on secondary click with two fingers
 defaults -currentHost write NSGlobalDomain com.apple.trackpad.trackpadCornerClickBehavior -int 0
 defaults -currentHost write NSGlobalDomain com.apple.trackpad.enableSecondaryClick -int 1
+
+# enable “natural” scrolling
+defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
+
+# set a fast keyboard repeat rate
+defaults write NSGlobalDomain KeyRepeat -int 3
+defaults write NSGlobalDomain InitialKeyRepeat -int 10
 
 ###############################################################################
 # Screen                                                                      #
 ###############################################################################
 
-# Require password immediately after sleep or screen saver begins
+# require password immediately after sleep or screen saver begins
 defaults write com.apple.screensaver askForPassword -int 1
 defaults write com.apple.screensaver askForPasswordDelay -int 0
 
-# Save screenshots to the desktop
+# save screenshots to the desktop
 defaults write com.apple.screencapture location -string "${HOME}/Desktop"
 
-# Save screenshots in PNG format (other options: BMP, GIF, JPG, PDF, TIFF)
+# save screenshots in PNG format (other options: BMP, GIF, JPG, PDF, TIFF)
 defaults write com.apple.screencapture type -string "png"
+
+# disable shadow in screenshots
+defaults write com.apple.screencapture disable-shadow -bool true
 
 ###############################################################################
 # Finder                                                                      #
 ###############################################################################
 
-# Set Home as the default location for new Finder windows
-# For Desktop, use `PfDe` and `file://${HOME}/Desktop/`
+# set Home as the default location for new Finder windows
+# for Desktop, use `PfDe` and `file://${HOME}/Desktop/`
 defaults write com.apple.finder NewWindowTarget -string "PfLo"
 defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}"
 
-# Show all filename extensions
+# keep folders on top when sorting by name
+defaults write com.apple.finder _FXSortFoldersFirst -bool true
+
+# show all filename extensions
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 
-# Avoid creating .DS_Store files on network volumes
-defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+# view finder window as list
+defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 
-# Empty Trash securely by default
+# avoid creating .DS_Store files on network or USB volumes
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
+
+# empty trash securely by default
 defaults write com.apple.finder EmptyTrashSecurely -bool true
+
+# empty trash items automatically after 30 days
+defaults write com.apple.finder "FXRemoveOldTrashItems" -bool "true"
+
+# when performing a search, search the current folder by default
+defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+
+# show the ~/Library folder
+chflags nohidden ~/Library
 
 ###############################################################################
 # Dock, Dashboard, and hot corners                                            #
 ###############################################################################
 
-# Set the icon size of Dock items
+# set the icon size of Dock items
 defaults write com.apple.dock tilesize -int 58
 
-# Position Dock on the left-hand side of the screen
+# set the icon size of Dock items (magnified)
+defaults write com.apple.dock largesize -int 65
+
+# set the Dock to magnify on cursor hover
+defaults write com.apple.dock magnification -bool true
+
+# position Dock on the left-hand side of the screen
 defaults write com.apple.dock orientation -string "left"
 
-# Automatically hide and show the Dock
+# automatically hide and show the Dock
 defaults write com.apple.dock autohide -bool true
 
-# Make Dock icons of hidden applications translucent
+# make Dock icons of hidden applications translucent
 defaults write com.apple.dock showhidden -bool true
 
 ###############################################################################
 # Safari & WebKit                                                             #
 ###############################################################################
-# Prevent Safari from opening ‘safe’ files automatically after downloading
+
+# prevent Safari from opening ‘safe’ files automatically after downloading
 defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
 
-# Hide Safari’s bookmarks bar by default
+# hide Safari’s bookmarks bar by default
 defaults write com.apple.Safari ShowFavoritesBar -bool false
 
-# Make Safari’s search banners default to Contains instead of Starts With
+# privacy: don’t send search queries to Apple
+defaults write com.apple.Safari UniversalSearchEnabled -bool false
+defaults write com.apple.Safari SuppressSearchSuggestions -bool true
+
+# set Safari’s home page to `about:blank` for faster loading
+defaults write com.apple.Safari HomePage -string "about:blank"
+
+# make Safari’s search banners default to Contains instead of Starts With
 defaults write com.apple.Safari FindOnPageMatchesWordStartsOnly -bool false
 
-# Enable the Develop menu and the Web Inspector in Safari
+# enable the Develop menu and the Web Inspector in Safari
 defaults write com.apple.Safari IncludeDevelopMenu -bool true
 defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
 defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
 
-# Add a context menu item for showing the Web Inspector in web views
+# add a context menu item for showing the Web Inspector in web views
 defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
+
+# disable AutoFill
+defaults write com.apple.Safari AutoFillFromAddressBook -bool false
+defaults write com.apple.Safari AutoFillPasswords -bool false
+defaults write com.apple.Safari AutoFillCreditCardData -bool false
+defaults write com.apple.Safari AutoFillMiscellaneousForms -bool false
+
+# warn about fraudulent websites
+defaults write com.apple.Safari WarnAboutFraudulentWebsites -bool true
 
 ###############################################################################
 # Mail                                                                        #
 ###############################################################################
 
-# Copy email addresses as `foo@example.com` instead of `Foo Bar <foo@example.com>` in Mail.app
+# copy email addresses as `foo@example.com` instead of `Foo Bar <foo@example.com>` in Mail.app
 defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false
 
-# Display emails in threaded mode, sorted by date (newest at the top)
+# display emails in threaded mode, sorted by date (newest at the top)
 defaults write com.apple.mail DraftsViewerAttributes -dict-add "DisplayInThreadedMode" -string "yes"
 defaults write com.apple.mail DraftsViewerAttributes -dict-add "SortedDescending" -string "no"
 defaults write com.apple.mail DraftsViewerAttributes -dict-add "SortOrder" -string "received-date"
+
+# disable inline attachments (just show the icons)
+defaults write com.apple.mail DisableInlineAttachmentViewing -bool true
+
+# automatically try sending later if outgoing server is unavailable
+defaults write com.apple.mail SuppressDeliveryFailure -bool true
+
+# include search results from encrypted messages
+defaults write com.apple.mail IndexDecryptedMessages -bool true
+
+# when quoting include all of the original message text
+defaults write com.apple.mail AlwaysIncludeOriginalMessage -bool true
+
+# place signature above quoted text
+defaults write com.apple.mail SignaturePlacedAboveQuotedText -bool true
+
+# show formatting bar in message compose window
+defaults write com.apple.mail ShowComposeFormatInspectorBar -bool true
+
+# set fixed-width font
+defaults write com.apple.mail NSFixedPitchFont -string "Menlo-Regular"
+defaults write com.apple.mail NSFixedPitchFontSize -int 14
+
+# set message font
+defaults write com.apple.mail NSFont -string Helvetica
+defaults write com.apple.mail NSFontSize -int 14
 
 ###############################################################################
 # Messages                                                                    #
 ###############################################################################
 
-# Disable automatic emoji substitution (i.e. use plain text smileys)
-defaults write com.apple.messageshelper.MessageController SOInputLineSettings -dict-add "automaticEmojiSubstitutionEnablediMessage" -bool false
+# disable automatic emoji substitution (i.e. use plain text smileys)
+defaults write com.apple.messageshelper.MessageController SOInputLineSettings \
+         -dict-add "automaticEmojiSubstitutionEnablediMessage" -bool false
 
-# Disable smart quotes as it’s annoying for messages that contain code
-defaults write com.apple.messageshelper.MessageController SOInputLineSettings -dict-add "automaticQuoteSubstitutionEnabled" -bool false
+# disable smart quotes as it’s annoying for messages that contain code
+defaults write com.apple.messageshelper.MessageController SOInputLineSettings \
+         -dict-add "automaticQuoteSubstitutionEnabled" -bool false
 
-# Disable continuous spell checking
-defaults write com.apple.messageshelper.MessageController SOInputLineSettings -dict-add "continuousSpellCheckingEnabled" -bool false
+# disable continuous spell checking
+defaults write com.apple.messageshelper.MessageController SOInputLineSettings \
+         -dict-add "continuousSpellCheckingEnabled" -bool false
 
 ###############################################################################
 # TextEdit                                                                    #
 ###############################################################################
 
-# Use plain text mode for new TextEdit documents
+# use plain text mode for new TextEdit documents
 defaults write com.apple.TextEdit RichText -int 0
 
-# Open and save files as UTF-8 in TextEdit
+# open and save files as UTF-8 in TextEdit
 defaults write com.apple.TextEdit PlainTextEncoding -int 4
 defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
 
@@ -154,10 +253,10 @@ defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
 # Activity Monitor                                                            #
 ###############################################################################
 
-# Show all processes in Activity Monitor
+# show all processes in Activity Monitor
 defaults write com.apple.ActivityMonitor ShowCategory -int 0
 
-# Sort Activity Monitor results by CPU usage
+# aort Activity Monitor results by CPU usage
 defaults write com.apple.ActivityMonitor SortColumn -string "CPUUsage"
 defaults write com.apple.ActivityMonitor SortDirection -int 0
 
@@ -165,33 +264,33 @@ defaults write com.apple.ActivityMonitor SortDirection -int 0
 # Terminal                                                                    #
 ###############################################################################
 
-# Enable Secure Keyboard Entry in Terminal.app
-# See: https://security.stackexchange.com/a/47786/8918
+# enable Secure Keyboard Entry in Terminal.app
+# see: https://security.stackexchange.com/a/47786/8918
 defaults write com.apple.terminal SecureKeyboardEntry -bool true
 
-# Disable the annoying line marks
+# disable the annoying line marks
 defaults write com.apple.Terminal ShowLineMarks -int 0
 
-# Use my Terminal settings in Terminal.app
+# use my Terminal settings in Terminal.app
 open "${script_dir}/default.terminal"
 sleep 1 # Wait a bit to make sure the theme is loaded
 defaults write com.apple.terminal "Default Window Settings" -string "default"
 defaults write com.apple.terminal "Startup Window Settings" -string "default"
 
-# Set default iTerm2 profile
-defaults write com.googlecode.iterm2 "PrefsCustomFolder" -string "${HOME}/src/alecbcs/dotfiles/osx/"
+# set default iTerm2 profile
+defaults write com.googlecode.iterm2 "PrefsCustomFolder" -string "${HOME}/src/${USER}/dotfiles/osx/"
 defaults write com.googlecode.iterm2 "LoadPrefsFromCustomFolder" -bool true
 
 ###############################################################################
 # Time Machine                                                                #
 ###############################################################################
 
-# Prevent Time Machine from prompting to use new hard drives as backup volume
+# prevent Time Machine from prompting to use new hard drives as backup volume
 defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 
-# Disable local Time Machine backups
-hash tmutil &> /dev/null && sudo tmutil disablelocal
-
+# disable MacOS Unplugged Drive Notification
+sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.DiskArbitration.diskarbitrationd.plist \
+     DADisableEjectNotification -bool YES && sudo pkill diskarbitrationd
 
 ###############################################################################
 # Kill affected applications                                                  #
