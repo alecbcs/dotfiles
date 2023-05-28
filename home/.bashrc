@@ -59,7 +59,7 @@ case $- in
 esac
 
 #------------------------------------------------------------------------
-# Spack
+# spack
 #------------------------------------------------------------------------
 export SPACK_SKIP_MODULES=1
 source_if_exists $HOME/src/spack/spack/share/spack/setup-env.sh
@@ -67,35 +67,57 @@ source_if_exists $HOME/src/spack/spack/share/spack/setup-env.sh
 default_env=${HOME}/.spack/environments/default/.spack-env/view
 pathadd $default_env/bin
 
+alias cdsp="cd ${SPACK_ROOT}"
+alias s="spack"
+
 #------------------------------------------------------------------------
 # ~/.bin
 #------------------------------------------------------------------------
 pathadd "{$HOME}/.bin"
 
 #------------------------------------------------------------------------
-# Go
+# direnv
 #------------------------------------------------------------------------
-export GOPATH="${HOME}/src/go"
+if type direnv &>/dev/null; then
+    eval "$(direnv hook zsh)"
+fi
+
+#------------------------------------------------------------------------
+# fzf
+#------------------------------------------------------------------------
+if type fzf &>/dev/null; then
+    source "${default_env}/share/fzf/shell/key-bindings.zsh"
+    source "${default_env}/share/fzf/shell/completion.zsh"
+fi
+
+export FZF_DEFAULT_COMMAND='fd --exclude .git'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+#------------------------------------------------------------------------
+# go
+#------------------------------------------------------------------------
+export GOPATH="${HOME}/go"
 pathadd "${GOPATH}/bin"
 
 #------------------------------------------------------------------------
-# Python
+# python
 #------------------------------------------------------------------------
 pathadd "${HOME}/.local/bin"
 
 #------------------------------------------------------------------------
-# Editors
+# editors
 #------------------------------------------------------------------------
 # Set system editor.
-export EDITOR="emacs -nw"
+export EDITOR="emacsclient -nw -a ''"
 
 # Emacs setup
 # Various emacs aliases.
+alias estop="emacsclient -e '(save-buffers-kill-emacs)'"
 alias emacs="$EDITOR"
 alias e="$EDITOR"
 
 #------------------------------------------------------------------------
-# GPG Settings
+# gpg settings
 #------------------------------------------------------------------------
 export GPG_TTY=$(tty)
 
@@ -114,7 +136,7 @@ alias ll="ls -lh $LS_OPTIONS"
 alias lsla="ls -la $LS_OPTIONS"
 
 #------------------------------------------------------------------------
-# Limits and shell settings
+# limits and shell settings
 #------------------------------------------------------------------------
 stty erase '^?'
 
@@ -129,7 +151,7 @@ ulimit -c 0
 shopt -s checkwinsize
 
 #------------------------------------------------------------------------
-# History
+# history
 #------------------------------------------------------------------------
 # append instead of overwrite (good for multiple sessions)
 shopt -s histappend
@@ -139,8 +161,11 @@ export HISTCONTROL=ignoreboth
 export HISTSIZE=10000
 
 #------------------------------------------------------------------------
-# Other settings
+# other settings
 #------------------------------------------------------------------------
+# alias ssh to custom configuration file to prevent override
+alias ssh="ssh -F $HOME/.ssh/default"
+
 # make grep highlight search string in red.
 alias grep='grep --color=auto'
 

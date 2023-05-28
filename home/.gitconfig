@@ -10,7 +10,8 @@
     ui = auto
 
 [core]
-    excludesfile = /Users/alecbcs/.gitignore-global
+    excludesfile = ~/.gitignore-global
+    sshCommand = ssh -F ~/.ssh/default
 
 [alias]
     # remove branches whose remote tracking branch is gone

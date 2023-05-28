@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------
-# Brew
+# brew
 #------------------------------------------------------------------------
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
@@ -8,7 +8,7 @@ pathadd fpath "${HOMEBREW_PREFIX}/share/zsh/site-functions"
 autoload -Uz compinit && compinit
 
 #------------------------------------------------------------------------
-# Spack
+# spack
 #------------------------------------------------------------------------
 export SPACK_SKIP_MODULES=1
 source_if_exists $HOME/src/spack/spack/share/spack/setup-env.sh
@@ -16,7 +16,7 @@ source_if_exists $HOME/src/spack/spack/share/spack/setup-env.sh
 default_env=$HOME/.spack/environments/default/.spack-env/view
 pathadd $default_env/bin
 
-alias cdsp="cd $SPACK_ROOT"
+alias cdsp="cd ${SPACK_ROOT}"
 alias s="spack"
 
 #------------------------------------------------------------------------
@@ -25,14 +25,14 @@ alias s="spack"
 pathadd "{$HOME}/.bin"
 
 #------------------------------------------------------------------------
-# Direnv
+# direnv
 #------------------------------------------------------------------------
 if type direnv &>/dev/null; then
     eval "$(direnv hook zsh)"
 fi
 
 #------------------------------------------------------------------------
-# FZF
+# fzf
 #------------------------------------------------------------------------
 if type fzf &>/dev/null; then
     source "${default_env}/share/fzf/shell/key-bindings.zsh"
@@ -43,18 +43,18 @@ export FZF_DEFAULT_COMMAND='fd --exclude .git'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 #------------------------------------------------------------------------
-# Go
+# go
 #------------------------------------------------------------------------
 pathadd GOPATH "${HOME}/go"
 pathadd "${GOPATH}/bin"
 
 #------------------------------------------------------------------------
-# Python
+# python
 #------------------------------------------------------------------------
 pathadd "${HOME}/.local/bin"
 
 #------------------------------------------------------------------------
-# Editors
+# editors
 #------------------------------------------------------------------------
 # Set system editor.
 export EDITOR="emacsclient -nw -a ''"
@@ -62,12 +62,11 @@ export EDITOR="emacsclient -nw -a ''"
 # Emacs setup
 # Various emacs aliases.
 alias estop="emacsclient -e '(save-buffers-kill-emacs)'"
-
 alias emacs="$EDITOR"
 alias e="$EDITOR"
 
 #------------------------------------------------------------------------
-# GPG Settings
+# gpg settings
 #------------------------------------------------------------------------
 export GPG_TTY=$(tty)
 
@@ -86,7 +85,7 @@ alias ll="ls -lh $LS_OPTIONS"
 alias lsla="ls -la $LS_OPTIONS"
 
 #------------------------------------------------------------------------
-# Limits and shell settings
+# limits and shell settings
 #------------------------------------------------------------------------
 stty erase '^?'
 
@@ -98,7 +97,7 @@ ulimit -s $(ulimit -Hs)
 ulimit -c 0
 
 #------------------------------------------------------------------------
-# Make key bindings for M-[fb], M-delete, etc. work
+# make key bindings for M-[fb], M-delete, etc. work
 #------------------------------------------------------------------------
 bindkey -me >& /dev/null
 bindkey '[3~' delete-char
@@ -114,7 +113,7 @@ bindkey '[1;9C' forward-word
 bindkey '[1;9D' backward-word
 
 #------------------------------------------------------------------------
-# History
+# history
 #------------------------------------------------------------------------
 export HISTSIZE=10000      # set history size
 export SAVEHIST=10000      # save history after logout
@@ -123,8 +122,11 @@ setopt HIST_IGNORE_DUPS    # save only one command if 2 are same
 setopt EXTENDED_HISTORY    # add timestamp for each entry
 
 #------------------------------------------------------------------------
-# Other settings
+# other settings
 #------------------------------------------------------------------------
+# alias ssh to custom configuration file to prevent override
+alias ssh="ssh -F $HOME/.ssh/default"
+
 # make grep highlight search string in red
 alias grep='grep --color=auto'
 
