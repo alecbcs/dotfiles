@@ -12,6 +12,7 @@ spack:
   - gh
   - go
   - jq
+  - ncdu
   - py-black
   - py-isort
   - py-pip
@@ -19,6 +20,7 @@ spack:
   - python
   - rclone
   - restic
+  - rust
   view: true
   concretizer:
     unify: true

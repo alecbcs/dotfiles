@@ -15,11 +15,10 @@
 
 (use-package go-mode
   :ensure t
-  :custom
-  (gofmt-command "goimports")
-  :hook ((go-mode . lsp-deferred)
-         (before-save . lsp-format-buffer)
-         (before-save . lsp-organize-imports)))
+  :config
+  (add-hook 'go-mode-hook 'eglot-ensure)
+  (add-hook 'before-save-hook 'eglot-format-buffer))
+
 
 (provide 'init-prog-langs)
 
