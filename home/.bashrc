@@ -78,6 +78,7 @@ pathadd "${HOME}/.bin"
 #------------------------------------------------------------------------
 # direnv
 #------------------------------------------------------------------------
+export DIRENV_WARN_TIMEOUT=30s
 if type direnv &>/dev/null; then
     eval "$(direnv hook zsh)"
 fi
