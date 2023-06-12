@@ -89,7 +89,8 @@
 ;; import $PATH from the external shell env
 (use-package exec-path-from-shell
   :ensure t
-  :config (when (memq window-system '(mac ns x))
+  :config
+  (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize)))
 
 ;; ===========================================================================
@@ -185,9 +186,5 @@
                 company-echo-metadata-frontend))
   (define-key company-active-map (kbd "C-n") 'company-select-next)
   (define-key company-active-map (kbd "C-p") 'company-select-previous))
-
-(use-package flycheck
-  :ensure t
-  :config (global-flycheck-mode +1))
 
 ;;; init.el ends here

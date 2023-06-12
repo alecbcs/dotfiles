@@ -5,6 +5,11 @@
 ;; of Emacs programming language modes.
 
 ;;;; Code:
+(use-package flycheck
+  :ensure t
+  :config
+  (global-flycheck-mode))
+
 (use-package eglot
   :ensure t)
 
@@ -19,6 +24,11 @@
   (add-hook 'go-mode-hook 'eglot-ensure)
   (add-hook 'before-save-hook 'eglot-format-buffer))
 
+(use-package yaml-mode
+  :ensure t)
+
+(use-package json-mode
+  :ensure t)
 
 (provide 'init-prog-langs)
 
