@@ -98,7 +98,7 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 #------------------------------------------------------------------------
 # go
 #------------------------------------------------------------------------
-export GOPATH="${HOME}/go"
+pathadd GOPATH "${HOME}/go"
 pathadd "${GOPATH}/bin"
 
 #------------------------------------------------------------------------
@@ -135,10 +135,6 @@ elif ls -G -d . >/dev/null 2>&1; then
     export LS_OPTIONS="-G -F"
     export LSCOLORS="exfxcxdxbxegedabagacad"
 fi
-
-alias ls="ls $LS_OPTIONS"
-alias ll="ls -lh $LS_OPTIONS"
-alias lsla="ls -la $LS_OPTIONS"
 
 alias ls="ls $LS_OPTIONS"
 alias ll="ls -lh $LS_OPTIONS"
