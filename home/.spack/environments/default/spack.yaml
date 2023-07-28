@@ -14,8 +14,10 @@ spack:
   - jq
   - ncdu
   - py-black
+  - py-flake8
   - py-isort
   - py-pip
+  - py-pylint
   - py-python-lsp-server
   - python
   - rclone

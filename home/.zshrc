@@ -40,7 +40,7 @@ if type fzf &>/dev/null; then
     source "${default_env}/share/fzf/shell/completion.zsh"
 fi
 
-export FZF_DEFAULT_COMMAND='bfs -exclude . -name .git 2>/dev/null'
+export FZF_DEFAULT_COMMAND='bfs . -exclude -name .git 2>/dev/null'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 #------------------------------------------------------------------------
@@ -77,8 +77,11 @@ export GPG_TTY=$(tty)
 # Give ls decent colors and options depending on version.
 if \ls --color -d . >/dev/null 2>&1; then
     export LS_OPTIONS="--color=auto -F -B"
+    export LS_COLORS="di=34:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;\
+                      43:su=30;41:sg=30;46:tw=30;42:ow=30;43"
 elif \ls -G -d . >/dev/null 2>&1; then
     export LS_OPTIONS="-G -F"
+    export LSCOLORS="exfxcxdxbxegedabagacad"
 fi
 
 alias ls="ls $LS_OPTIONS"
