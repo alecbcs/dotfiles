@@ -155,6 +155,9 @@ ulimit -c 0
 # Make bash set LINES and COLUMNS after each command.
 shopt -s checkwinsize
 
+# Shorten and customize terminal bash prompt.
+export PS1="\u@\h:\W\$ "
+
 #------------------------------------------------------------------------
 # history
 #------------------------------------------------------------------------
