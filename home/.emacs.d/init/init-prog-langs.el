@@ -11,7 +11,9 @@
   (global-flycheck-mode))
 
 (use-package eglot
-  :ensure t)
+  :ensure t
+  :config
+  (setq eglot-report-progress nil))
 
 (use-package python-mode
   :ensure t
@@ -25,7 +27,9 @@
   (add-hook 'before-save-hook 'eglot-format-buffer))
 
 (use-package yaml-mode
-  :ensure t)
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode)))
 
 (use-package json-mode
   :ensure t)

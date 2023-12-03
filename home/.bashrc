@@ -172,7 +172,13 @@ export HISTSIZE=10000
 # other settings
 #------------------------------------------------------------------------
 # alias ssh to custom configuration file to prevent override
-alias ssh="ssh -F $HOME/.ssh/default"
+if [ -f $HOME/.ssh/default ]; then
+    alias ssh="ssh -F $HOME/.ssh/default"
+    export GIT_SSH_COMMAND="ssh -F $HOME/.ssh/default"
+fi
+
+# manually forward agent when required and ignore existing connections
+alias ssha='ssh -A -S none'
 
 # make grep highlight search string in red.
 alias grep='grep --color=auto'

@@ -15,7 +15,7 @@
 
 [alias]
     # remove branches whose remote tracking branch is gone
-    bgone = !"f() { \
+    bgone = "!f() { \
         gone_branches=$(git branch \
             --sort=-committerdate \
             --format '%(refname:short) %(upstream:track)' \

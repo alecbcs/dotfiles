@@ -79,6 +79,9 @@
   ;; enable visual line mode
   (setq visual-line-mode 1)
 
+  ;; enforce eldoc to only use a single line
+  (setq eldoc-echo-area-use-multiline-p nil)
+
   ;; no info screen at startup
   (setq inhibit-startup-screen t)
   (load-theme 'twilight t))
@@ -174,17 +177,23 @@
   :config (flx-ido-mode +1))
 
 (use-package company
-  :diminish company-mode
-  :ensure t
-  :hook (prog-mode . company-mode)
   :config
-  (setq company-minimum-prefix-length 1
-    company-idle-delay 0.1
-    company-selection-wrap-around t
-    company-tooltip-align-annotations t
-    company-frontends '(company-pseudo-tooltip-frontend ; show tooltip even for single candidate
-                company-echo-metadata-frontend))
+  (add-hook 'prog-mode-hook 'company-mode)
+  (setq company-global-modes '(not text-mode term-mode markdown-mode gfm-mode))
+  (setq company-selection-wrap-around t
+        company-show-numbers t
+        company-tooltip-align-annotations t
+        company-idle-delay 0.5
+        company-require-match nil
+        company-minimum-prefix-length 2)
+  ;; Bind next and previous selection to more intuitive keys
   (define-key company-active-map (kbd "C-n") 'company-select-next)
-  (define-key company-active-map (kbd "C-p") 'company-select-previous))
+  (define-key company-active-map (kbd "C-p") 'company-select-previous)
+  ;; (add-to-list 'company-frontends 'company-tng-frontend)
+  ;; :bind (("TAB" . 'company-indent-or-complete-common)))
+  :bind (:map company-active-map ("<tab>" . company-complete-selection)))
+
+(use-package company-prescient
+  :config (company-prescient-mode))
 
 ;;; init.el ends here

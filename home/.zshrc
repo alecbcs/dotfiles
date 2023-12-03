@@ -129,7 +129,10 @@ setopt EXTENDED_HISTORY    # add timestamp for each entry
 # other settings
 #------------------------------------------------------------------------
 # alias ssh to custom configuration file to prevent override
-alias ssh="ssh -F $HOME/.ssh/default"
+if [ -f $HOME/.ssh/default ]; then
+    alias ssh="ssh -F $HOME/.ssh/default"
+    export GIT_SSH_COMMAND="ssh -F $HOME/.ssh/default"
+fi
 
 # make grep highlight search string in red
 alias grep='grep --color=auto'
