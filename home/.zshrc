@@ -134,6 +134,9 @@ if [ -f $HOME/.ssh/default ]; then
     export GIT_SSH_COMMAND="ssh -F $HOME/.ssh/default"
 fi
 
+# manually forward agent when required and ignore existing connections
+alias ssha='ssh -A -S none'
+
 # make grep highlight search string in red
 alias grep='grep --color=auto'
 
