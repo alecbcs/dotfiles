@@ -40,7 +40,7 @@ if type fzf &>/dev/null; then
     source "${default_env}/share/fzf/shell/completion.zsh"
 fi
 
-export FZF_DEFAULT_COMMAND='bfs . -exclude -name .git 2>/dev/null'
+export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 #------------------------------------------------------------------------
