@@ -24,6 +24,7 @@ spack:
   - rclone
   - restic
   - ripgrep
+  - rust+dev
   view: true
   concretizer:
     unify: true

@@ -5,6 +5,9 @@
 ;; of Emacs programming language modes.
 
 ;;;; Code:
+;; ===========================================================================
+;; Common Tools
+;; ===========================================================================
 (use-package flycheck
   :ensure t
   :config
@@ -15,22 +18,48 @@
   :config
   (setq eglot-report-progress nil))
 
+;; ===========================================================================
+;; Python
+;; ===========================================================================
 (use-package python-mode
   :ensure t
   :config
   (add-hook 'python-mode-hook 'eglot-ensure))
 
+;; ===========================================================================
+;; Go
+;; ===========================================================================
 (use-package go-mode
   :ensure t
   :config
   (add-hook 'go-mode-hook 'eglot-ensure)
   (add-hook 'before-save-hook 'eglot-format-buffer))
 
+;; ===========================================================================
+;; Rust
+;; ===========================================================================
+(use-package rust-mode
+  :ensure t
+  :config
+  (setq rust-format-on-save t)
+  (add-hook 'rust-mode-hook 'eglot-ensure))
+
+(use-package flycheck-rust
+  :ensure t
+  :config
+  (add-hook 'flycheck-mode-hook 'flycheck-rust-setup))
+
+;; ===========================================================================
+;; YAML
+;; ===========================================================================
 (use-package yaml-mode
   :ensure t
   :config
   (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode)))
 
+;; ===========================================================================
+;; JSON
+;; ===========================================================================
 (use-package json-mode
   :ensure t)
 

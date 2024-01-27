@@ -142,8 +142,10 @@ elif ls -G -d . >/dev/null 2>&1; then
 fi
 
 alias ls="ls $LS_OPTIONS"
+alias lst="ls -t $LS_OPTIONS"
 alias ll="ls -lh $LS_OPTIONS"
-alias lsla="ls -la $LS_OPTIONS"
+alias llt="ls -lht $LS_OPTIONS"
+alias lsla="ls -lha $LS_OPTIONS"
 
 #------------------------------------------------------------------------
 # limits and shell settings

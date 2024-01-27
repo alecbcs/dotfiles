@@ -1,4 +1,4 @@
-;;;; init.el -- personal main emacs config
+;;; init.el -- personal main emacs config
 ;;;; Commentary:
 
 ;; This code includes an opinionated setup for my customized version
@@ -134,7 +134,7 @@
     make-backup-files nil))
 
 (use-package autorevert
-  :ensure nil
+  :ensure t
   :config
   (global-auto-revert-mode +1)
   (setq auto-revert-interval 2
@@ -143,16 +143,16 @@
     auto-revert-verbose nil))
 
 (use-package paren
-  :ensure nil
+  :ensure t
   :init (setq show-paren-delay 0)
   :config (show-paren-mode +1))
 
 (use-package elec-pair
-  :ensure nil
+  :ensure t
   :hook (prog-mode . electric-pair-mode))
 
 (use-package whitespace
-  :ensure nil
+  :ensure t
   :hook (before-save . whitespace-cleanup))
 
 (use-package ido
@@ -177,6 +177,7 @@
   :config (flx-ido-mode +1))
 
 (use-package company
+  :ensure t
   :config
   (add-hook 'prog-mode-hook 'company-mode)
   (setq company-global-modes '(not text-mode term-mode markdown-mode gfm-mode))
@@ -194,6 +195,13 @@
   :bind (:map company-active-map ("<tab>" . company-complete-selection)))
 
 (use-package company-prescient
+  :ensure t
   :config (company-prescient-mode))
+
+(use-package rg
+  :ensure t
+  :config
+  (rg-enable-default-bindings)
+  (rg-enable-menu))
 
 ;;; init.el ends here
