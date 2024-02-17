@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=xremap
+Exec=/usr/bin/xremap /home/alecbcs/.xremap/config.yml
+Type=Application
+Terminal=false
+StartupNotify=false
