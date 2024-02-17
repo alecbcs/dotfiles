@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+export B2_ACCOUNT_ID=$(pass Backup/b2-account-id)
+export B2_ACCOUNT_KEY=$(pass Backup/b2-account-key)
+
+restic -r b2:$(pass Backup/b2-bucket-name):/ backup \
+       ~/.ssh \
+       ~/.gnupg \
+       ~/.password-store
