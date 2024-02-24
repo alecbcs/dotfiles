@@ -30,7 +30,22 @@
         done; \
     }; f"
 
-    # Go to the github/gitlab page for this repo
+    # view branches that have been sucessfully squashed
+    bsquashed = "!f() { \
+        current_branch=$(git rev-parse --abbrev-ref HEAD); \
+        branches=$(git for-each-ref refs/heads/ --format='%(refname:short)'); \
+        for branch in $branches; do \
+            merge_base=$(git merge-base $current_branch $branch); \
+            branch_parsed=$(git rev-parse \"$branch^{tree}\"); \
+            merge_commit=$(git commit-tree $branch_parsed -p $merge_base -m _); \
+            merged_status=$(git cherry $current_branch $merge_commit); \
+            if [[ $merged_status == \"-\"* ]]; then \
+                echo $branch; \
+            fi; \
+        done; \
+    }; f"
+
+    # go to the github/gitlab page for this repo
     go = "!f() {\
         url=$(git remote -v | grep '^origin\\|^github\\|^gitlab' | \
             sort -r | \
