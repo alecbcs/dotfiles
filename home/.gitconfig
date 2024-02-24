@@ -38,8 +38,8 @@
             merge_base=$(git merge-base $current_branch $branch); \
             branch_parsed=$(git rev-parse \"$branch^{tree}\"); \
             merge_commit=$(git commit-tree $branch_parsed -p $merge_base -m _); \
-            merged_status=$(git cherry $current_branch $merge_commit); \
-            if [[ $merged_status == \"-\"* ]]; then \
+            merged_status=$(git cherry $current_branch $merge_commit | cut -c1-1); \
+            if [ \"$merged_status\" = - ]; then \
                 echo $branch; \
             fi; \
         done; \
