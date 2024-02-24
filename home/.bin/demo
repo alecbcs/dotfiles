@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+export PS1="alec@laptop %1~ %# "
