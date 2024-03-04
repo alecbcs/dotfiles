@@ -16,6 +16,8 @@ source_if_exists $HOME/src/spack/spack/share/spack/setup-env.sh
 default_env=$HOME/.spack/environments/default/.spack-env/view
 pathadd $default_env/bin
 
+pathadd pythonpath $HOME/src/spack/spack/lib/spack/
+
 alias cdsp="cd ${SPACK_ROOT}"
 alias s="spack"
 

@@ -7,7 +7,7 @@ spack:
   specs:
   - coreutils
   - direnv
-  - emacs
+  - emacs+native+treesitter+json
   - fd
   - fzf
   - gh

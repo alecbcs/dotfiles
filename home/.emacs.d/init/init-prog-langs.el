@@ -8,6 +8,12 @@
 ;; ===========================================================================
 ;; Common Tools
 ;; ===========================================================================
+(use-package treesit-auto
+  :ensure t
+  :config
+  (setq treesit-auto-install 't)
+  (global-treesit-auto-mode))
+
 (use-package flycheck
   :ensure t
   :config
@@ -24,7 +30,8 @@
 (use-package python-mode
   :ensure t
   :config
-  (add-hook 'python-mode-hook 'eglot-ensure))
+  (add-hook 'python-mode-hook 'eglot-ensure)
+  (add-hook 'python-ts-mode-hook 'eglot-ensure))
 
 ;; ===========================================================================
 ;; Go
@@ -33,6 +40,7 @@
   :ensure t
   :config
   (add-hook 'go-mode-hook 'eglot-ensure)
+  (add-hook 'go-ts-mode-hook 'eglot-ensure)
   (add-hook 'before-save-hook 'eglot-format-buffer))
 
 ;; ===========================================================================
@@ -42,7 +50,8 @@
   :ensure t
   :config
   (setq rust-format-on-save t)
-  (add-hook 'rust-mode-hook 'eglot-ensure))
+  (add-hook 'rust-mode-hook 'eglot-ensure)
+  (add-hook 'rust-ts-mode-hook 'eglot-ensure))
 
 (use-package flycheck-rust
   :ensure t
