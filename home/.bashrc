@@ -119,7 +119,7 @@ export EDITOR="emacsclient -nw -a ''"
 
 # Emacs setup
 # Various emacs aliases.
-alias estop="emacsclient -e '(save-buffers-kill-emacs)'"
+alias estop="emacsclient -e '(kill-emacs)'"
 alias emacs="$EDITOR"
 alias e="$EDITOR"
 
