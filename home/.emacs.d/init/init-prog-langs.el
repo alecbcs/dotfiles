@@ -6,32 +6,12 @@
 
 ;;;; Code:
 ;; ===========================================================================
-;; Common Tools
-;; ===========================================================================
-(use-package treesit-auto
-  :ensure t
-  :config
-  (setq treesit-auto-install 't)
-  (global-treesit-auto-mode))
-
-(use-package flycheck
-  :ensure t
-  :config
-  (global-flycheck-mode))
-
-(use-package eglot
-  :ensure t
-  :config
-  (setq eglot-report-progress nil))
-
-;; ===========================================================================
 ;; Python
 ;; ===========================================================================
 (use-package python-mode
   :ensure t
   :config
-  (add-hook 'python-mode-hook 'eglot-ensure)
-  (add-hook 'python-ts-mode-hook 'eglot-ensure))
+  (add-hook 'python-mode-hook 'eglot-ensure))
 
 ;; ===========================================================================
 ;; Go
@@ -71,6 +51,30 @@
 ;; ===========================================================================
 (use-package json-mode
   :ensure t)
+
+;; ===========================================================================
+;; Common Tools
+;; ===========================================================================
+;; (use-package treesit-auto
+;;   :ensure t
+;;   :config
+;;   (setq treesit-auto-install 't)
+;;   (global-treesit-auto-mode))
+
+(use-package flycheck
+  :ensure t
+  :config
+  (global-flycheck-mode))
+
+(use-package envrc
+  :ensure t
+  :config
+  (envrc-global-mode))
+
+(use-package eglot
+  :ensure t
+  :config
+  (setq eglot-report-progress nil))
 
 (provide 'init-prog-langs)
 

@@ -1,12 +1,21 @@
-/* ~/Library/KeyBindings/DefaultKeyBinding.dict */
-/* The original bindings are from Mike Ferris of lorax.com as shipped
+/* ~/Library/KeyBindings/DefaultKeyBinding.dict
+ *
+ * The original bindings are from Mike Ferris of lorax.com as shipped
  * with his TextExtras package.  They were further modified by Mishka Gorodnitzky
- * (misaka@pobox.com), Patrick Linskey, and Llew Mason.
+ * (misaka@pobox.com), Patrick Linskey, Llew Mason, and Nilesh Kapadia.
  *
- * Last modified by: Nilesh Kapadia (http://www.nileshk.com/)
+ * Last modified by: Alec Scott
  *
- * Place this file in ~/Library/KeyBindings
+ * Here is a rough cheatsheet for syntax.
+ * Key Modifiers
+ * ^ : Ctrl
+ * $ : Shift
+ * ~ : Option (Alt)
+ * @ : Command (Apple)
+ * # : Numeric Keypad
+ *
  */
+
 {
     "~f"      = "moveWordForward:";              /* M-f */
     "~b"      = "moveWordBackward:";             /* M-b */
@@ -30,7 +39,6 @@
     "\UF72C"  = "pageUp:";                       /* page-up */
     "\UF72D"  = "pageDown:";                     /* page-down */
     "^/"      = "undo:";                         /* C-/ */
-    "^_"      = "undo:";                         /* C-_ */ /* Added by me */
     "~c"      = "capitalizeWord:";               /* M-c */
     "~u"      = "uppercaseWord:";                /* M-u */
     "~l"      = "lowercaseWord:";                /* M-l */
@@ -49,18 +57,11 @@
         "k"   = "performClose:";                 /* C-x C-k */
     };
 
-    /* Mark-point stuff (Emacs-style mark and point bindings are
-     * implemented but not bound by default.  In the text system the
-     * mark and point are ranges, not just locations.  The "point" is
-     * the selected range.)
-     */
-    "^@" = "setMark:";                           /* C-@ */
+    /* Mark-point stuff */
     "^ " = "setMark:";                           /* C-space */
     "^w" = "deleteToMark:";                      /* C-w */
 
-    /* Keybindings for 60% keyboard styles*/
+    /* Additional Keybindings for 60% keyboard styles */
     "$\U001B" = ("insertText:", "~");
     "~\U001B" = ("insertText:", "`");
-
-
 }

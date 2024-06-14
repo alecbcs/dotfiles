@@ -1,4 +1,4 @@
-;;; init.el -- personal main emacs config
+;;;; init.el -- personal main emacs config
 ;;;; Commentary:
 
 ;; This code includes an opinionated setup for my customized version
@@ -184,7 +184,7 @@
   (setq company-selection-wrap-around t
         company-show-numbers t
         company-tooltip-align-annotations t
-        company-idle-delay 0.5
+        company-idle-delay 0
         company-require-match nil
         company-minimum-prefix-length 2)
   ;; Bind next and previous selection to more intuitive keys

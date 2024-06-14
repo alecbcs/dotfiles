@@ -54,20 +54,24 @@ defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
 # disable auto-correct
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 
+# disable app bouncing on the dock
+defaults write com.apple.dock no-bouncing -bool true
+
 ###############################################################################
 # Trackpad, mouse, keyboard                                                   #
 ###############################################################################
 
 # enable tap to click for this user and for the login screen
-defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
-defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
-defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -int 1
+sudo defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -int 1
+sudo defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+sudo defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 
 # turn on secondary click with two fingers
 defaults -currentHost write NSGlobalDomain com.apple.trackpad.trackpadCornerClickBehavior -int 0
 defaults -currentHost write NSGlobalDomain com.apple.trackpad.enableSecondaryClick -int 1
 
-# enable “natural” scrolling
+# enable natural scrolling
 defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
 
 # set a fast keyboard repeat rate
@@ -91,6 +95,7 @@ defaults write com.apple.screencapture type -string "png"
 # disable shadow in screenshots
 defaults write com.apple.screencapture disable-shadow -bool true
 
+
 ###############################################################################
 # Finder                                                                      #
 ###############################################################################
@@ -109,6 +114,9 @@ defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 # view finder window as list
 defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 
+# hide tags from finder
+defaults write com.apple.finder ShowRecentTags -int 0
+
 # avoid creating .DS_Store files on network or USB volumes
 defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
 defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
@@ -124,6 +132,12 @@ defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
 
 # show the ~/Library folder
 chflags nohidden ~/Library
+
+# hide hard drives, external usb drives, and cds, and servers from desktop
+defaults write com.apple.finder ShowHardDrivesOnDesktop -int 0
+defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -int 0
+defaults write com.apple.finder ShowMountedServersOnDesktop -int 0
+defaults write com.apple.finder ShowRemovableMediaOnDesktop -int 0
 
 ###############################################################################
 # Dock, Dashboard, and hot corners                                            #
@@ -144,8 +158,12 @@ defaults write com.apple.dock orientation -string "left"
 # automatically hide and show the Dock
 defaults write com.apple.dock autohide -bool true
 
+# disable recently viewed applications on the Dock
+defaults write com.apple.dock show-recents -bool false
+
 # make Dock icons of hidden applications translucent
 defaults write com.apple.dock showhidden -bool true
+
 
 ###############################################################################
 # Safari & WebKit                                                             #

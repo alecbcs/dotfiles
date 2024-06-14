@@ -1,11 +1,17 @@
+#========================================================================
+# ZSH Config
+#========================================================================
 #------------------------------------------------------------------------
 # brew
 #------------------------------------------------------------------------
-eval "$(/opt/homebrew/bin/brew shellenv)"
+pathadd "/opt/homebrew/bin"
 
 # Add brew auto-completions to zsh lookup path
-pathadd fpath "${HOMEBREW_PREFIX}/share/zsh/site-functions"
-autoload -Uz compinit && compinit
+if type brew &>/dev/null; then
+   HOMEBREW_PREFIX=$(brew --prefix 2>/dev/null)
+   pathadd fpath "${HOMEBREW_PREFIX}/share/zsh/site-functions"
+   autoload -Uz compinit && compinit
+fi
 
 #------------------------------------------------------------------------
 # spack
@@ -16,7 +22,7 @@ source_if_exists $HOME/src/spack/spack/share/spack/setup-env.sh
 default_env=$HOME/.spack/environments/default/.spack-env/view
 pathadd $default_env/bin
 
-pathadd pythonpath $HOME/src/spack/spack/lib/spack/
+export PYTHONPATH="${SPACK_ROOT}/lib/spack"
 
 alias cdsp="cd ${SPACK_ROOT}"
 alias s="spack"
@@ -29,17 +35,17 @@ pathadd "${HOME}/.bin"
 #------------------------------------------------------------------------
 # direnv
 #------------------------------------------------------------------------
-export DIRENV_WARN_TIMEOUT=30s
 if type direnv &>/dev/null; then
     eval "$(direnv hook zsh)"
 fi
+
+export DIRENV_WARN_TIMEOUT=30s
 
 #------------------------------------------------------------------------
 # fzf
 #------------------------------------------------------------------------
 if type fzf &>/dev/null; then
-    source "${default_env}/share/fzf/shell/key-bindings.zsh"
-    source "${default_env}/share/fzf/shell/completion.zsh"
+    eval "$(fzf --zsh)"
 fi
 
 export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git'
@@ -69,12 +75,12 @@ alias emacs="$EDITOR"
 alias e="$EDITOR"
 
 #------------------------------------------------------------------------
-# gpg settings
+# gpg
 #------------------------------------------------------------------------
 export GPG_TTY=$(tty)
 
 #------------------------------------------------------------------------
-# ls options
+# ls
 #------------------------------------------------------------------------
 # Give ls decent colors and options depending on version.
 if \ls --color -d . >/dev/null 2>&1; then
@@ -87,8 +93,38 @@ elif \ls -G -d . >/dev/null 2>&1; then
 fi
 
 alias ls="ls $LS_OPTIONS"
+alias lst="ls -t $LS_OPTIONS"
 alias ll="ls -lh $LS_OPTIONS"
-alias lsla="ls -la $LS_OPTIONS"
+alias llt="ls -lht $LS_OPTIONS"
+alias lsla="ls -lah $LS_OPTIONS"
+
+#------------------------------------------------------------------------
+# ssh
+#------------------------------------------------------------------------
+# alias ssh to custom configuration file to prevent override
+if [ -f $HOME/.ssh/default ]; then
+    alias ssh="ssh -F ${HOME}/.ssh/default"
+    alias scp="scp -F ${HOME}/.ssh/default"
+
+    alias rsync="rsync -e 'ssh -F ${HOME}/.ssh/default'"
+    export GIT_SSH_COMMAND="ssh -F ${HOME}/.ssh/default"
+fi
+
+# manually forward agent when required and ignore existing connections
+alias ssha='ssh -A -S none'
+
+#------------------------------------------------------------------------
+# zsh
+#------------------------------------------------------------------------
+source_if_exists ~/.zsh/zsh-autosuggestions.zsh
+
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+ZSH_AUTOSUGGEST_HISTORY_IGNORE="(cd|cat|e|git|ls) *"
+
+setopt prompt_subst
+
+prompt_prefix='%F{blue}%n@%m%F{reset_color}'
+export prompt='${prompt_prefix}:$(prompt_pwd) $(git_branch)'$'\n''> '
 
 #------------------------------------------------------------------------
 # limits and shell settings
@@ -130,15 +166,6 @@ setopt EXTENDED_HISTORY    # add timestamp for each entry
 #------------------------------------------------------------------------
 # other settings
 #------------------------------------------------------------------------
-# alias ssh to custom configuration file to prevent override
-if [ -f $HOME/.ssh/default ]; then
-    alias ssh="ssh -F $HOME/.ssh/default"
-    export GIT_SSH_COMMAND="ssh -F $HOME/.ssh/default"
-fi
-
-# manually forward agent when required and ignore existing connections
-alias ssha='ssh -A -S none'
-
 # make grep highlight search string in red
 alias grep='grep --color=auto'
 

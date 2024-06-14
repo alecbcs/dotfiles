@@ -51,6 +51,25 @@ source_if_exists /etc/lc.bashrc
 source_if_exists /etc/bashrc
 
 #------------------------------------------------------------------------
+# spack
+#------------------------------------------------------------------------
+export SPACK_SKIP_MODULES=1
+source_if_exists $HOME/src/spack/spack/share/spack/setup-env.sh
+
+default_env=${HOME}/.spack/environments/default/.spack-env/view
+pathadd $default_env/bin
+
+pathadd PYTHONPATH "${SPACK_ROOT}/lib/spack"
+
+alias cdsp="cd ${SPACK_ROOT}"
+alias s="spack"
+
+#------------------------------------------------------------------------
+# ~/.bin
+#------------------------------------------------------------------------
+pathadd "${HOME}/.bin"
+
+#------------------------------------------------------------------------
 # EXIT HERE if this is a non-interactive shell
 #------------------------------------------------------------------------
 # Test whether this is an interactive shell.
@@ -65,38 +84,19 @@ esac
 source_if_exists /etc/bash_completion
 
 #------------------------------------------------------------------------
-# spack
-#------------------------------------------------------------------------
-export SPACK_SKIP_MODULES=1
-source_if_exists $HOME/src/spack/spack/share/spack/setup-env.sh
-
-default_env=${HOME}/.spack/environments/default/.spack-env/view
-pathadd $default_env/bin
-
-pathadd pythonpath $HOME/src/spack/spack/lib/spack/
-
-alias cdsp="cd ${SPACK_ROOT}"
-alias s="spack"
-
-#------------------------------------------------------------------------
-# ~/.bin
-#------------------------------------------------------------------------
-pathadd "${HOME}/.bin"
-
-#------------------------------------------------------------------------
 # direnv
 #------------------------------------------------------------------------
-export DIRENV_WARN_TIMEOUT=30s
 if type direnv &>/dev/null; then
     eval "$(direnv hook bash)"
 fi
+
+export DIRENV_WARN_TIMEOUT=30s
 
 #------------------------------------------------------------------------
 # fzf
 #------------------------------------------------------------------------
 if type fzf &>/dev/null; then
-    source "${default_env}/share/fzf/shell/key-bindings.bash"
-    source "${default_env}/share/fzf/shell/completion.bash"
+    eval "$(fzf --bash)"
 fi
 
 export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git'
@@ -144,10 +144,20 @@ elif ls -G -d . >/dev/null 2>&1; then
 fi
 
 alias ls="ls $LS_OPTIONS"
-alias lst="ls -t $LS_OPTIONS"
 alias ll="ls -lh $LS_OPTIONS"
-alias llt="ls -lht $LS_OPTIONS"
-alias lsla="ls -lha $LS_OPTIONS"
+alias lsla="ls -la $LS_OPTIONS"
+
+#------------------------------------------------------------------------
+# ssh
+#------------------------------------------------------------------------
+# alias ssh to custom configuration file to prevent override
+if [ -f $HOME/.ssh/default ]; then
+    alias ssh="ssh -F $HOME/.ssh/default"
+    export GIT_SSH_COMMAND="ssh -F $HOME/.ssh/default"
+fi
+
+# manually forward agent when required and ignore existing connections
+alias ssha='ssh -A -S none'
 
 #------------------------------------------------------------------------
 # limits and shell settings
@@ -180,15 +190,6 @@ export HISTSIZE=10000
 #------------------------------------------------------------------------
 # other settings
 #------------------------------------------------------------------------
-# alias ssh to custom configuration file to prevent override
-if [ -f $HOME/.ssh/default ]; then
-    alias ssh="ssh -F $HOME/.ssh/default"
-    export GIT_SSH_COMMAND="ssh -F $HOME/.ssh/default"
-fi
-
-# manually forward agent when required and ignore existing connections
-alias ssha='ssh -A -S none'
-
 # make grep highlight search string in red.
 alias grep='grep --color=auto'
 
