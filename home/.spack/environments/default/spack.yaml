@@ -5,10 +5,9 @@
 spack:
   # add package specs to the `specs` list
   specs:
-  - awscli
   - coreutils
   - direnv
-  - emacs
+  - emacs+native+treesitter+json
   - fd
   - fzf
   - gh
@@ -16,7 +15,6 @@ spack:
   - gnupg
   - go
   - jq
-  - kubectl
   - ncdu
   - pass
   - py-black

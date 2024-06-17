@@ -10,7 +10,6 @@ pathadd "/opt/homebrew/bin"
 if type brew &>/dev/null; then
    HOMEBREW_PREFIX=$(brew --prefix 2>/dev/null)
    pathadd fpath "${HOMEBREW_PREFIX}/share/zsh/site-functions"
-   autoload -Uz compinit && compinit
 fi
 
 #------------------------------------------------------------------------
@@ -22,7 +21,9 @@ source_if_exists $HOME/src/spack/spack/share/spack/setup-env.sh
 default_env=$HOME/.spack/environments/default/.spack-env/view
 pathadd $default_env/bin
 
-export PYTHONPATH="${SPACK_ROOT}/lib/spack"
+pathadd PYTHONPATH "${SPACK_ROOT}/lib/spack"
+pathadd fpath "${default_env}/share/zsh/site-functions"
+autoload -Uz compinit && compinit
 
 alias cdsp="cd ${SPACK_ROOT}"
 alias s="spack"
