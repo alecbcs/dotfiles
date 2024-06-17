@@ -23,6 +23,9 @@
   (add-hook 'go-ts-mode-hook 'eglot-ensure)
   (add-hook 'before-save-hook 'eglot-format-buffer))
 
+(use-package gotest
+  :ensure t)
+
 ;; ===========================================================================
 ;; Rust
 ;; ===========================================================================
@@ -55,11 +58,11 @@
 ;; ===========================================================================
 ;; Common Tools
 ;; ===========================================================================
-;; (use-package treesit-auto
-;;   :ensure t
-;;   :config
-;;   (setq treesit-auto-install 't)
-;;   (global-treesit-auto-mode))
+(use-package treesit-auto
+  :ensure t
+  :config
+  (setq treesit-auto-install 't)
+  (global-treesit-auto-mode))
 
 (use-package flycheck
   :ensure t

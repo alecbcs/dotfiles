@@ -87,14 +87,21 @@
   (load-theme 'twilight t))
 
 ;; ===========================================================================
+;; Optimize Emacs's garbage collector for better performance
+;; ===========================================================================
+(use-package gcmh
+  :ensure t
+  :config
+  (gcmh-mode 1))
+
+;; ===========================================================================
 ;; $PATH within Emacs
 ;; ===========================================================================
 ;; import $PATH from the external shell env
 (use-package exec-path-from-shell
   :ensure t
-  :config
-  (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize)))
+  :init
+  (exec-path-from-shell-initialize))
 
 ;; ===========================================================================
 ;; Load Additional Configuration Files
