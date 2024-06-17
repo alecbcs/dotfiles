@@ -113,8 +113,8 @@ alias lsla="ls -lah $LS_OPTIONS"
 if [ -f $HOME/.ssh/default ]; then
     alias ssh="ssh -F ${HOME}/.ssh/default"
     alias scp="scp -F ${HOME}/.ssh/default"
-
     alias rsync="rsync -e 'ssh -F ${HOME}/.ssh/default'"
+
     export GIT_SSH_COMMAND="ssh -F ${HOME}/.ssh/default"
 fi
 
