@@ -17,10 +17,14 @@ fi
 #------------------------------------------------------------------------
 # spack
 #------------------------------------------------------------------------
+default_env="${HOME}/.spack/environments/default/.spack-env/view"
+
 export SPACK_SKIP_MODULES=1
 export SPACK_ROOT="${HOME}/src/spack/spack"
 
-default_env="${HOME}/.spack/environments/default/.spack-env/view"
+if [ -x ${default_env}/bin/python ]; then
+    export SPACK_PYTHON=${default_env}/bin/python
+fi
 
 pathadd "${default_env}/bin"
 pathadd PYTHONPATH "${SPACK_ROOT}/lib/spack"
