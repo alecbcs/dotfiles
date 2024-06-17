@@ -54,15 +54,14 @@ source_if_exists /etc/bashrc
 # spack
 #------------------------------------------------------------------------
 export SPACK_SKIP_MODULES=1
-source_if_exists $HOME/src/spack/spack/share/spack/setup-env.sh
+source_if_exists "${HOME}/src/spack/spack/share/spack/setup-env.sh"
 
-default_env=${HOME}/.spack/environments/default/.spack-env/view
-pathadd $default_env/bin
+default_env="${HOME}/.spack/environments/default/.spack-env/view"
 
+pathadd "${default_env}/bin"
 pathadd PYTHONPATH "${SPACK_ROOT}/lib/spack"
 
 alias cdsp="cd ${SPACK_ROOT}"
-alias s="spack"
 
 #------------------------------------------------------------------------
 # ~/.bin
@@ -82,25 +81,29 @@ esac
 # bash autocompletion
 #------------------------------------------------------------------------
 source_if_exists /etc/bash_completion
+# Spack installed programs
+for comp in "${default_env}/share/bash-completion/completions"*; do
+    source_if_exists $comp
+done
 
 #------------------------------------------------------------------------
 # direnv
 #------------------------------------------------------------------------
+export DIRENV_WARN_TIMEOUT=30s
+
 if type direnv &>/dev/null; then
     eval "$(direnv hook bash)"
 fi
 
-export DIRENV_WARN_TIMEOUT=30s
-
 #------------------------------------------------------------------------
 # fzf
 #------------------------------------------------------------------------
+export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
 if type fzf &>/dev/null; then
     eval "$(fzf --bash)"
 fi
-
-export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git'
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 #------------------------------------------------------------------------
 # go
