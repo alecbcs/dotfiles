@@ -16,17 +16,15 @@ fi
 # spack
 #------------------------------------------------------------------------
 export SPACK_SKIP_MODULES=1
-source_if_exists $HOME/src/spack/spack/share/spack/setup-env.sh
+source_if_exists "${HOME}/src/spack/spack/share/spack/setup-env.sh"
 
-default_env=$HOME/.spack/environments/default/.spack-env/view
-pathadd $default_env/bin
+default_env="${HOME}/.spack/environments/default/.spack-env/view"
 
+pathadd "${default_env}/bin"
 pathadd PYTHONPATH "${SPACK_ROOT}/lib/spack"
 pathadd fpath "${default_env}/share/zsh/site-functions"
-autoload -Uz compinit && compinit
 
 alias cdsp="cd ${SPACK_ROOT}"
-alias s="spack"
 
 #------------------------------------------------------------------------
 # ~/.bin
@@ -36,21 +34,21 @@ pathadd "${HOME}/.bin"
 #------------------------------------------------------------------------
 # direnv
 #------------------------------------------------------------------------
+export DIRENV_WARN_TIMEOUT=30s
+
 if type direnv &>/dev/null; then
     eval "$(direnv hook zsh)"
 fi
 
-export DIRENV_WARN_TIMEOUT=30s
-
 #------------------------------------------------------------------------
 # fzf
 #------------------------------------------------------------------------
+export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
 if type fzf &>/dev/null; then
     eval "$(fzf --zsh)"
 fi
-
-export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git'
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 #------------------------------------------------------------------------
 # go
@@ -175,3 +173,7 @@ alias which='whence -p'
 
 # make an alias for getting to the dotfiles git repo
 alias cddot='cd ${HOME}/src/${USER}/dotfiles/'
+
+# load additional zsh completions
+autoload -Uz compinit
+compinit
