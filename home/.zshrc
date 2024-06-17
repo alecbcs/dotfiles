@@ -156,6 +156,7 @@ bindkey '[1;9D' backward-word
 #------------------------------------------------------------------------
 # history
 #------------------------------------------------------------------------
+export HISTFILE=~/.zsh_history
 export HISTSIZE=10000      # set history size
 export SAVEHIST=10000      # save history after logout
 setopt INC_APPEND_HISTORY  # append into history file
