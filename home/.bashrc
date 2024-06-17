@@ -60,6 +60,7 @@ default_env="${HOME}/.spack/environments/default/.spack-env/view"
 
 pathadd "${default_env}/bin"
 pathadd PYTHONPATH "${SPACK_ROOT}/lib/spack"
+pathadd BCPATH "${default_env}/share/bash-completion/completions"
 
 alias cdsp="cd ${SPACK_ROOT}"
 
@@ -81,9 +82,10 @@ esac
 # bash autocompletion
 #------------------------------------------------------------------------
 source_if_exists /etc/bash_completion
-# Spack installed programs
-for comp in "${default_env}/share/bash-completion/completions"*; do
-    source_if_exists $comp
+for dir in $BCPATH; do
+    for comp in "${dir}"*; do
+        source_if_exists $comp
+    done
 done
 
 #------------------------------------------------------------------------

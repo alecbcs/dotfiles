@@ -1,6 +1,8 @@
 #========================================================================
 # ZSH Config
 #========================================================================
+AFTER_COMPINIT=()
+
 #------------------------------------------------------------------------
 # brew
 #------------------------------------------------------------------------
@@ -16,7 +18,7 @@ fi
 # spack
 #------------------------------------------------------------------------
 export SPACK_SKIP_MODULES=1
-source_if_exists "${HOME}/src/spack/spack/share/spack/setup-env.sh"
+export SPACK_ROOT="${HOME}/src/spack/spack"
 
 default_env="${HOME}/.spack/environments/default/.spack-env/view"
 
@@ -25,6 +27,9 @@ pathadd PYTHONPATH "${SPACK_ROOT}/lib/spack"
 pathadd fpath "${default_env}/share/zsh/site-functions"
 
 alias cdsp="cd ${SPACK_ROOT}"
+
+# Run Spack setup-env.sh after compinit to use zcompcache
+AFTER_COMPINIT+=("${HOME}/src/spack/spack/share/spack/setup-env.sh")
 
 #------------------------------------------------------------------------
 # ~/.bin
@@ -156,12 +161,12 @@ bindkey '[1;9D' backward-word
 #------------------------------------------------------------------------
 # history
 #------------------------------------------------------------------------
-export HISTFILE=~/.zsh_history
-export HISTSIZE=10000      # set history size
-export SAVEHIST=10000      # save history after logout
-setopt INC_APPEND_HISTORY  # append into history file
-setopt HIST_IGNORE_DUPS    # save only one command if 2 are same
-setopt EXTENDED_HISTORY    # add timestamp for each entry
+export HISTFILE=~/.zsh_history # set history location
+export HISTSIZE=10000          # set history size
+export SAVEHIST=10000          # save history after logout
+setopt INC_APPEND_HISTORY      # append into history file
+setopt HIST_IGNORE_DUPS        # save only one command if 2 are same
+setopt EXTENDED_HISTORY        # add timestamp for each entry
 
 #------------------------------------------------------------------------
 # other settings
@@ -175,9 +180,14 @@ alias which='whence -p'
 # make an alias for getting to the dotfiles git repo
 alias cddot='cd ${HOME}/src/${USER}/dotfiles/'
 
-# load additional zsh completions
-autoload -Uz compinit
-for dump in ~/.zcompdump(N.mh+24); do
-  compinit
+#------------------------------------------------------------------------
+# zsh tab completions
+#------------------------------------------------------------------------
+autoload -Uz compinit bashcompinit
+compinit
+bashcompinit
+
+# Source bash scripts after compinit
+for script in $AFTER_COMPINIT; do
+    source_if_exists $script
 done
-compinit -C

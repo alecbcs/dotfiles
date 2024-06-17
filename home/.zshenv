@@ -1,4 +1,5 @@
 typeset -U path
+skip_global_compinit=1
 
 # Prepends directories to path, if they exist.
 #      pathadd /path/to/dir            # add to PATH
