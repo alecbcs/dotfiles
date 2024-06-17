@@ -45,7 +45,7 @@
     }; f"
 
     # go to the github/gitlab page for this repo
-    go = "!f() {\
+    go = "!f() { \
         url=$(git remote -v | grep '^origin\\|^github\\|^gitlab' | \
             sort -r | \
             egrep -o 'git..b.com[:/][^/ ]+/[^/ ]+' | head -1 | \
