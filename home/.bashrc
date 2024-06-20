@@ -191,6 +191,7 @@ shopt -s histappend
 # don't save duplicate entries
 export HISTCONTROL=ignoreboth
 export HISTSIZE=10000
+export HISTFILE=~/.bash_history
 
 #------------------------------------------------------------------------
 # other settings
