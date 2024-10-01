@@ -82,6 +82,9 @@
   ;; enforce eldoc to only use a single line
   (setq eldoc-echo-area-use-multiline-p nil)
 
+  ;; auto close bracket insertion
+  (electric-pair-mode 1)
+
   ;; no info screen at startup
   (setq inhibit-startup-screen t)
   (load-theme 'twilight t))
@@ -153,10 +156,6 @@
   :ensure t
   :init (setq show-paren-delay 0)
   :config (show-paren-mode +1))
-
-(use-package elec-pair
-  :ensure t
-  :hook (prog-mode . electric-pair-mode))
 
 (use-package whitespace
   :ensure t

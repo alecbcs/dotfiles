@@ -72,6 +72,12 @@
   :config
   (global-flycheck-mode))
 
+(use-package flycheck-eglot
+  :ensure t
+  :after (flycheck eglot)
+  :config
+  (global-flycheck-eglot-mode 1))
+
 (use-package envrc
   :ensure t
   :config
