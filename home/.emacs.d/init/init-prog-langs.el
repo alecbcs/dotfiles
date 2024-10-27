@@ -12,9 +12,7 @@
   :ensure t
   :config
   (add-hook 'python-mode-hook 'eglot-ensure)
-  (add-hook 'python-ts-mode-hook 'eglot-ensure)
-  (setq eglot-workspace-configuration
-        '(:pylsp (:plugins (:pyflakes (:enabled :json-false))))))
+  (add-hook 'python-ts-mode-hook 'eglot-ensure))
 
 ;; ===========================================================================
 ;; Go
@@ -22,6 +20,8 @@
 (use-package go-mode
   :ensure t
   :config
+  (setq go-ts-mode-indent-offset 4)
+  (setq go-mode-indent-offset 4)
   (add-hook 'go-mode-hook 'eglot-ensure)
   (add-hook 'go-ts-mode-hook 'eglot-ensure)
   (add-hook 'before-save-hook 'eglot-format-buffer))

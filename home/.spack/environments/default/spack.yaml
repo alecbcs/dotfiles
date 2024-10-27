@@ -24,7 +24,7 @@ spack:
   - py-pip
   - py-pylint
   - py-python-lsp-server
-  - python
+  - python@3.12
   - rclone
   - restic
   - ripgrep
