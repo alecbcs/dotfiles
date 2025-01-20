@@ -1,7 +1,7 @@
 keymap:
   - name: Emacs
     application:
-      not: [Emacs, gnome-terminal-server, org.gnome.Terminal]
+      not: [Emacs, gnome-terminal-server, org.gnome.Terminal, ghostty]
     remap:
       # Cursor
       C-b: { with_mark: left }

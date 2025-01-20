@@ -24,10 +24,11 @@ spack:
   - py-pip
   - py-pylint
   - py-python-lsp-server
-  - python@3.12
+  - python
   - rclone
   - restic
   - ripgrep
+  - rsync
   - rust+dev
   - tree
   view: true

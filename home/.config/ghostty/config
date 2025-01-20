@@ -1,0 +1,33 @@
+#========================================================================
+# Ghostty Config
+#========================================================================
+#------------------------------------------------------------------------
+# general
+#------------------------------------------------------------------------
+auto-update = off
+window-height = 25
+window-width = 100
+
+#------------------------------------------------------------------------
+# theme
+#------------------------------------------------------------------------
+background = 141414
+foreground = ffffff
+theme = zenbones_dark
+
+font-family = Jetbrains Mono
+font-size = 13.5
+
+shell-integration-features = no-cursor
+cursor-style = block
+cursor-style-blink = false
+mouse-scroll-multiplier = "0.5"
+
+#------------------------------------------------------------------------
+# MacOS
+#------------------------------------------------------------------------
+macos-secure-input-indication = false
+macos-icon = custom-style
+macos-icon-screen-color = 151C1F,151C1F
+macos-icon-ghost-color = ffffff
+macos-titlebar-proxy-icon = hidden
