@@ -21,28 +21,30 @@
   (package-refresh-contents)
   (package-install 'use-package))
 (eval-and-compile
-  (setq use-package-always-ensure t))
+  (setq use-package-always-ensure t)
+  (setq use-package-verbose nil)
+  (setq use-package-compute-statistics nil))
 
 ;; ===========================================================================
 ;; General Options
 ;; ===========================================================================
 (use-package emacs
   :config
-  ;; scroll one line at a time
-  (setq scroll-step 1)
-  (setq scroll-conservatively 10000)
-
   ;; no menu bar
   (menu-bar-mode -1)
 
   ;; no tool bar
   (tool-bar-mode -1)
 
+  ;; scroll one line at a time
+  (setq scroll-step 1)
+  (setq scroll-conservatively 10000)
+
   ;; disable emacs alarms
   (setq ring-bell-function 'ignore)
 
-  ;; don't use customize
-  (setq custom-file null-device)
+  ;; no info screen at startup
+  (setq inhibit-startup-screen t)
 
   ;; allow following symlinks
   (setq vc-follow-symlinks t)
@@ -51,6 +53,9 @@
   (setq-default indent-tabs-mode nil)
   (setq-default tab-width 4)
   (setq indent-line-function 'insert-tab)
+
+  ;; auto close bracket insertion
+  (electric-pair-mode 1)
 
   ;; remove trailing whitespace
   (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -69,11 +74,13 @@
 
   ;; when using a mac allow option key as meta
   (when (equal system-type 'darwin)
-    (setq mac-command-modifier 'super)
-    (setq mac-option-modifier 'meta))
+    (setq-default mac-command-modifier 'super)
+    (setq-default mac-option-modifier 'meta))
 
-  ;; add the location on additional configs
-  (add-to-list 'load-path (expand-file-name "init" user-emacs-directory))
+  ;; don't use customize
+  (setq custom-file null-device)
+
+  ;; enable spellcheck
   (defconst *spell-check-support-enabled* t)
 
   ;; enable visual line mode
@@ -82,12 +89,11 @@
   ;; enforce eldoc to only use a single line
   (setq eldoc-echo-area-use-multiline-p nil)
 
-  ;; auto close bracket insertion
-  (electric-pair-mode 1)
+  ;; load theme
+  (load-theme 'twilight t)
 
-  ;; no info screen at startup
-  (setq inhibit-startup-screen t)
-  (load-theme 'twilight t))
+  ;; add the location on additional configs
+  (add-to-list 'load-path (expand-file-name "init" user-emacs-directory)))
 
 ;; ===========================================================================
 ;; Optimize Emacs's garbage collector for better performance
@@ -95,7 +101,9 @@
 (use-package gcmh
   :ensure t
   :config
-  (gcmh-mode 1))
+  (gcmh-mode 1)
+  (setq gcmh-idle-delay 5)
+  (setq gcmh-high-cons-threshold 16777216)) ;; 16MB
 
 ;; ===========================================================================
 ;; $PATH within Emacs
@@ -109,19 +117,10 @@
 ;; ===========================================================================
 ;; Load Additional Configuration Files
 ;; ===========================================================================
-;; load org-mode config from file.
 (require 'init-org)
-
-;; load markdown-mode config from file.
 (require 'init-markdown)
-
-;; load dired-sidebar config from file.
 (require 'init-sidebar)
-
-;; load programming languages config from file.
 (require 'init-prog-langs)
-
-;; load docker tramp from file.
 (require 'init-podman)
 
 ;; ===========================================================================
@@ -139,9 +138,9 @@
 (use-package files
   :ensure nil
   :config
-  (setq confirm-kill-processes nil
-    create-lockfiles nil ; don't create .# files (crashes 'npm start')
-    make-backup-files nil))
+  (setq confirm-kill-processes nil)
+  (setq create-lockfiles nil ) ;; don't create .# files (crashes 'npm start')
+  (setq make-backup-files nil))
 
 (use-package autorevert
   :ensure t
@@ -161,48 +160,65 @@
   :ensure t
   :hook (before-save . whitespace-cleanup))
 
-(use-package ido
+
+(use-package vertico
+  :ensure t
+  :custom (vertico-count 10)
+  :init (vertico-mode))
+
+(use-package vertico-directory
+  :after vertico
+  :ensure nil ;; no need to install, comes with vertico
+  :bind (:map vertico-map
+    ("DEL" . vertico-directory-delete-char)))
+
+(use-package orderless
+  :ensure t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (style partial-completion)))))
+
+(use-package consult
+  :ensure t
+  :custom
+  (consult-preview-key nil)
+  :bind
+  (("C-x b" . 'consult-buffer)    ;; Switch buffer, including recent and bookmarks
+   ("M-l"   . 'consult-git-grep)  ;; Search inside a project
+   ("M-y"   . 'consult-yank-pop)  ;; Paste by selecting the kill-ring
+   ("M-s"   . 'consult-line)      ;; Search current buffer, like swiper
+   ))
+
+(use-package embark
+  :ensure t
+  :bind
+  (("C-."   . embark-act)
+   ("C-;"   . embark-dwim)        ;; good alternative: M-.
+   ("C-h B" . embark-bindings)))  ;; alternative for `describe-bindings`
+
+(use-package embark-consult
+  :after (embark consult)
+  :ensure t)
+
+(use-package corfu
+  :ensure t
+  :custom
+  (corfu-auto t)
+  (tab-always-indent 'complete)
+  :init
+  (global-corfu-mode))
+
+(use-package corfu-terminal
   :ensure t
   :config
-  (ido-mode +1)
-  (setq ido-everywhere t
-    ido-enable-flex-matching t))
+  ;; use corfu-terminal when not running as graphical emacs
+  (unless (display-graphic-p) (corfu-terminal-mode +1)))
 
-(use-package ido-vertical-mode
+(use-package cape
   :ensure t
-  :config
-  (ido-vertical-mode +1)
-  (setq ido-vertical-define-keys 'C-n-C-p-up-and-down))
-
-(use-package ido-completing-read+
-  :ensure t
-  :config (ido-ubiquitous-mode +1))
-
-(use-package flx-ido
-  :ensure t
-  :config (flx-ido-mode +1))
-
-(use-package company
-  :ensure t
-  :config
-  (add-hook 'prog-mode-hook 'company-mode)
-  (setq company-global-modes '(not text-mode term-mode markdown-mode gfm-mode))
-  (setq company-selection-wrap-around t
-        company-show-numbers t
-        company-tooltip-align-annotations t
-        company-idle-delay 0
-        company-require-match nil
-        company-minimum-prefix-length 2)
-  ;; Bind next and previous selection to more intuitive keys
-  (define-key company-active-map (kbd "C-n") 'company-select-next)
-  (define-key company-active-map (kbd "C-p") 'company-select-previous)
-  ;; (add-to-list 'company-frontends 'company-tng-frontend)
-  ;; :bind (("TAB" . 'company-indent-or-complete-common)))
-  :bind (:map company-active-map ("<tab>" . company-complete-selection)))
-
-(use-package company-prescient
-  :ensure t
-  :config (company-prescient-mode))
+  :after corfu
+  :hook
+  (completion-at-point-functions . cape-file))
 
 (use-package rg
   :ensure t
