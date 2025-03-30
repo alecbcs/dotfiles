@@ -11,7 +11,7 @@
 (use-package treesit-auto
   :ensure t
   :custom
-  (setq treesit-auto-install 't)
+  (treesit-auto-install 't)
   (global-treesit-auto-mode))
 
 (use-package envrc
@@ -49,8 +49,8 @@
   :ensure t
   :defer t
   :hook
-  (python-mode-hook . eglot-ensure)
-  (python-ts-mode-hook . eglot-ensure))
+  (python-mode . eglot-ensure)
+  (python-ts-mode . eglot-ensure))
 
 ;; ===========================================================================
 ;; Go
@@ -61,9 +61,9 @@
   (go-ts-mode-indent-offset 4)
   (go-mode-indent-offset 4)
   :hook
-  (go-mode-hook . eglot-ensure)
-  (go-ts-mode-hook . eglot-ensure)
-  (before-save-hook . eglot-format-buffer))
+  (go-mode . eglot-ensure)
+  (go-ts-mode . eglot-ensure)
+  (before-save . eglot-format-buffer))
 
 (use-package gotest
   :ensure t
@@ -78,14 +78,14 @@
   :custom
   (rust-format-on-save t)
   :hook
-  (rust-mode-hook . eglot-ensure)
-  (rust-ts-mode-hook . eglot-ensure))
+  (rust-mode . eglot-ensure)
+  (rust-ts-mode . eglot-ensure))
 
 (use-package flycheck-rust
   :ensure t
   :after (flycheck rust-mode)
   :hook
-  (flycheck-mode-hook . flycheck-rust-setup))
+  (flycheck-mode . flycheck-rust-setup))
 
 ;; ===========================================================================
 ;; YAML

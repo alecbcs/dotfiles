@@ -57,9 +57,6 @@
   ;; auto close bracket insertion
   (electric-pair-mode 1)
 
-  ;; remove trailing whitespace
-  (add-hook 'before-save-hook 'delete-trailing-whitespace)
-
   ;; enfoce a final newline in files
   (setq require-final-newline t)
 
@@ -93,7 +90,11 @@
   (load-theme 'twilight t)
 
   ;; add the location on additional configs
-  (add-to-list 'load-path (expand-file-name "init" user-emacs-directory)))
+  (add-to-list 'load-path (expand-file-name "init" user-emacs-directory))
+
+  :hook
+  ;; remove trailing whitespace
+  (before-save . delete-trailing-whitespace))
 
 ;; ===========================================================================
 ;; Optimize Emacs's garbage collector for better performance
