@@ -1,8 +1,7 @@
 ;;;; init.el -- personal main emacs config
 ;;;; Commentary:
 
-;; This code includes an opinionated setup for my customized version
-;; of Emacs.
+;; An opinionated setup for my customized version of Emacs.
 
 ;;;; Code:
 

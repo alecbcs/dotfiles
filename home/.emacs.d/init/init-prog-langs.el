@@ -1,8 +1,7 @@
-;;;; init.el -- personal main emacs config
+;;;; init-prog-langs.el -- preferences for configuring programming modes
 ;;;; Commentary:
 
-;; This code includes an opinionated setup for my customized version
-;; of Emacs programming language modes.
+;; An opinionated setup for my customized version of Emacs.
 
 ;;;; Code:
 ;; ===========================================================================
@@ -16,7 +15,7 @@
 
 (use-package envrc
   :ensure t
-  :config
+  :custom
   (envrc-global-mode))
 
 (use-package eglot
@@ -25,8 +24,7 @@
   (eglot-report-progress nil)
   (eglot-send-changes-idle-time 3)
   (fset #'jsonrpc--log-event #'ignore)
-  :config
-  (setq-default eglot-workspace-configuration
+  (setq eglot-workspace-configuration
     '((:pylsp . (:plugins (:ruff (:enabled t :lineLength 88
       :formatEnabled t)))))))
 
