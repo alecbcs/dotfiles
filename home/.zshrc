@@ -24,6 +24,7 @@ default_env="${HOME}/.spack/environments/default/.spack-env/view"
 
 if [ -x ${SPACK_ROOT} ]; then
     export PYTHONPATH="${SPACK_ROOT}/lib/spack:$PYTHONPATH"
+    alias cdsp="cd ${SPACK_ROOT}"
 fi
 
 if [ -x ${default_env}/bin/python ]; then
@@ -32,8 +33,6 @@ fi
 
 pathadd "${default_env}/bin"
 pathadd fpath "${default_env}/share/zsh/site-functions"
-
-alias cdsp="cd ${SPACK_ROOT}"
 
 # Run Spack setup-env.sh after compinit to use zcompcache
 AFTER_COMPINIT+=("${HOME}/src/spack/spack/share/spack/setup-env.sh")

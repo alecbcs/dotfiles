@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -e
+
+git switch -c "add/${1}-v${2}"
+git add "*${1}/package.py"
+git commit -m "${1}: add v${2}"
+git push --set-upstream origin "add/${1}-v${2}"
+gh --repo spack/spack pr create --title "${1}: add v${2}" --body "${3}"
+git switch -

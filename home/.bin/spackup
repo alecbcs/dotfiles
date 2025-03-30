@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+
+#========================================================================
+# Rebuild Spack Environments
+#========================================================================
+function git_branch {
+    git branch 2> /dev/null | sed -n -e 's/^\* \(.*\)/\1/p'
+}
+
+#------------------------------------------------------------------------
+# save existing spack directory state
+#------------------------------------------------------------------------
+cd $SPACK_ROOT
+branch=$(git_branch)
+
+if [[ "$branch" != "develop" ]]; then
+    if git diff; then
+        stashed=0
+        git stash
+    else
+        stashed=1
+    fi
+
+    git switch develop
+fi
+
+#------------------------------------------------------------------------
+# update spack
+#------------------------------------------------------------------------
+git fetch upstream
+reslog=$(git log HEAD..upstream/develop --oneline)
+if [[ "${reslog}" != "" ]] ; then
+    git pull
+else
+    echo "Already up-to-date"
+    exit 0
+fi
+
+#------------------------------------------------------------------------
+# reconcretize default as the base env
+#------------------------------------------------------------------------
+spack -e default concretize -f --fresh-roots
+spack -e default install
+
+#------------------------------------------------------------------------
+# recompile emacs for compatibility
+#------------------------------------------------------------------------
+emacs --batch --load ~/.emacs.d/init.el --execute '(kill-emacs)' || true
+emacs --batch --load ~/.emacs.d/init.el --execute '(package-recompile-all)'
+
+#------------------------------------------------------------------------
+# reconcretize project environments
+#------------------------------------------------------------------------
+for env in $(spack env ls | grep -v default); do
+    spack -e $env concretize -f --fresh-roots
+    spack -e $env install
+done
+
+#------------------------------------------------------------------------
+# clean up old packages
+#------------------------------------------------------------------------
+spack gc -Eb
+
+#------------------------------------------------------------------------
+# restore spack working directory state
+#------------------------------------------------------------------------
+if [[ "$branch" != "develop" ]]; then
+    git switch "$branch"
+    if $stashed; then
+        git stash apply
+    fi
+fi
