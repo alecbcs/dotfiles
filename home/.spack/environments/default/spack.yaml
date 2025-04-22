@@ -6,6 +6,7 @@ spack:
   # add package specs to the `specs` list
   specs:
   - coreutils
+  - difftastic
   - direnv
   - emacs+native+treesitter+json
   - fd
@@ -15,15 +16,13 @@ spack:
   - gnupg
   - go
   - jq
+  - mergiraf
   - ncdu
   - pass
-  - py-black
-  - py-flake8
-  - py-isort
-  - py-mypy
   - py-pip
-  - py-pylint
+  - py-python-lsp-ruff
   - py-python-lsp-server
+  - py-ruff
   - python
   - rclone
   - restic
