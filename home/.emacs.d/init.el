@@ -35,29 +35,8 @@
   ;; no tool bar
   (tool-bar-mode -1)
 
-  ;; scroll one line at a time
-  (setq scroll-step 1)
-  (setq scroll-conservatively 10000)
-
-  ;; disable emacs alarms
-  (setq ring-bell-function 'ignore)
-
-  ;; no info screen at startup
-  (setq inhibit-startup-screen t)
-
-  ;; allow following symlinks
-  (setq vc-follow-symlinks t)
-
-  ;; set tabs to equal 4 spaces
-  (setq-default indent-tabs-mode nil)
-  (setq-default tab-width 4)
-  (setq indent-line-function 'insert-tab)
-
   ;; auto close bracket insertion
   (electric-pair-mode 1)
-
-  ;; enfoce a final newline in files
-  (setq require-final-newline t)
 
   ;; automatically make scripts executable if they have shebant (#!) in them
   (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
@@ -68,22 +47,8 @@
   ;; set tramp to use .ssh/config settings
   (customize-set-variable 'tramp-use-ssh-controlmaster-options nil)
 
-  ;; when using a mac allow option key as meta
-  (when (equal system-type 'darwin)
-    (setq-default mac-command-modifier 'super)
-    (setq-default mac-option-modifier 'meta))
-
-  ;; don't use customize
-  (setq custom-file null-device)
-
   ;; enable spellcheck
   (defconst *spell-check-support-enabled* t)
-
-  ;; enable visual line mode
-  (setq visual-line-mode 1)
-
-  ;; enforce eldoc to only use a single line
-  (setq eldoc-echo-area-use-multiline-p nil)
 
   ;; load theme
   (load-theme 'twilight t)
@@ -93,7 +58,53 @@
 
   :hook
   ;; remove trailing whitespace
-  (before-save . delete-trailing-whitespace))
+  (before-save . delete-trailing-whitespace)
+
+  :custom
+  ;; scroll one line at a time
+  (scroll-step 1)
+  (scroll-conservatively 10000)
+
+  ;; disable emacs alarms
+  (ring-bell-function 'ignore)
+
+  ;; no info screen at startup
+  (inhibit-startup-screen t)
+
+  ;; allow following symlinks
+  (vc-follow-symlinks t)
+
+  ;; set tabs to equal 4 spaces
+  (indent-tabs-mode nil)
+  (tab-width 4)
+  (indent-line-function 'insert-tab)
+
+  ;; enfoce a final newline in files
+  (require-final-newline t)
+
+  ;; when using a mac allow option key as meta
+  (when (equal system-type 'darwin)
+    (mac-command-modifier 'super)
+    (mac-option-modifier 'meta))
+
+  ;; don't use customize
+  (custom-file null-device)
+
+  ;; enable visual line mode
+  (visual-line-mode 1)
+
+  ;; enforce eldoc to only use a single line
+  (eldoc-echo-area-use-multiline-p nil)
+
+  ;; hide commands from M-x that aren't possible
+  (read-extended-command-predicate #'command-completion-default-include-p)
+
+  ;; allow minibuffers to be opened from minibuffers
+  (enable-recursive-minibuffers t)
+
+  ;; don't allow cursor in the minibuffer
+  (minibuffer-prompt-properties
+   '(read-only t cursor-intangible t face minibuffer-prompt)))
 
 ;; ===========================================================================
 ;; Optimize Emacs's garbage collector for better performance
@@ -102,8 +113,9 @@
   :ensure t
   :config
   (gcmh-mode 1)
-  (setq gcmh-idle-delay 5)
-  (setq gcmh-high-cons-threshold 16777216)) ;; 16MB
+  :custom
+  (gcmh-idle-delay 5)
+  (gcmh-high-cons-threshold 16777216)) ;; 16MB
 
 ;; ===========================================================================
 ;; $PATH within Emacs
@@ -135,26 +147,34 @@
   :ensure nil
   :config (column-number-mode +1))
 
+(use-package savehist
+  :ensure t
+  :init
+  (savehist-mode))
+
 (use-package files
   :ensure nil
-  :config
-  (setq confirm-kill-processes nil)
-  (setq create-lockfiles nil ) ;; don't create .# files (crashes 'npm start')
-  (setq make-backup-files nil))
+  :custom
+  (confirm-kill-processes nil)
+  (create-lockfiles nil ) ;; don't create .# files (crashes 'npm start')
+  (make-backup-files nil))
 
 (use-package autorevert
   :ensure t
   :config
   (global-auto-revert-mode +1)
-  (setq auto-revert-interval 2
-    auto-revert-check-vc-info t
-    global-auto-revert-non-file-buffers t
-    auto-revert-verbose nil))
+  :custom
+  (auto-revert-interval 2)
+  (auto-revert-check-vc-info t)
+  (global-auto-revert-non-file-buffers t)
+  (auto-revert-verbose nil))
 
 (use-package paren
   :ensure t
-  :init (setq show-paren-delay 0)
-  :config (show-paren-mode +1))
+  :config
+  (show-paren-mode +1)
+  :custom
+  (show-paren-delay 0))
 
 (use-package whitespace
   :ensure t
@@ -163,14 +183,25 @@
 
 (use-package vertico
   :ensure t
-  :custom (vertico-count 10)
-  :init (vertico-mode))
+  :custom
+  (vertico-count 10)
+  (vertico-cycle t)
+  (vertico-resize nil)
+  (vertico-preselect 'first)
+  (vertico-mode 1))
 
 (use-package vertico-directory
   :after vertico
   :ensure nil ;; no need to install, comes with vertico
   :bind (:map vertico-map
-    ("DEL" . vertico-directory-delete-char)))
+    ("RET"   . vertico-directory-enter)
+    ("DEL"   . vertico-directory-delete-char)
+    ("M-DEL" . vertico-directory-delete-word)))
+
+(use-package marginalia
+  :ensure t
+  :config
+  (marginalia-mode 1))
 
 (use-package orderless
   :ensure t

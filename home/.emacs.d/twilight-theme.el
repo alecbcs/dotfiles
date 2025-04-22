@@ -1,4 +1,4 @@
-;;; twilight-theme.el --- Twilight Color Theme for Emacs.
+;; twilight-theme.el --- Twilight Color Theme for Emacs.
 
 ;; Copyright (C) 2008 Marcus Crafter <crafterm@redartisan.com>
 ;; Copyright (C) 2015-2017 Jason Blevins <jrblevin@sdf.org>
@@ -131,7 +131,7 @@
    `(gui-element ((t (:background ,tw-fg-d :foreground ,tw-bg-2))))
    `(region ((t (:background ,tw-bg+3))))
    `(shadow ((t (:foreground ,tw-bg+4))))
-   `(highlight ((t (:background ,tw-bg-1))))
+   `(highlight ((t (:foreground ,tw-pale-org :background ,tw-bg+2))))
    `(highline-face ((t (:background ,tw-cy))))
    `(secondary-selection ((t (:background ,tw-blu-1))))
    `(link ((t :foreground ,tw-blu, :underline t)))
