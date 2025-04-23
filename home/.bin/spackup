@@ -33,7 +33,7 @@ if [[ "${reslog}" != "" ]] ; then
     git pull
 else
     echo "Already up-to-date"
-    exit 0
+    #exit 0
 fi
 
 #------------------------------------------------------------------------
@@ -42,7 +42,7 @@ fi
 spack mark -i $(spack -e default find -H)
 spack -e default concretize -f --fresh-roots
 spack -e default install
-spack gc -y
+spack gc -by
 
 #------------------------------------------------------------------------
 # recompile emacs for compatibility
@@ -57,7 +57,7 @@ for env in $(spack env ls | grep -v default); do
     spack mark -i $(spack -e $env find -H)
     spack -e $env concretize -f --fresh-roots
     spack -e $env install
-    spack gc -y
+    spack gc -by
 done
 
 #------------------------------------------------------------------------

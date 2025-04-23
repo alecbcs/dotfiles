@@ -43,6 +43,13 @@ AFTER_COMPINIT+=("${HOME}/src/spack/spack/share/spack/setup-env.sh")
 pathadd "${HOME}/.bin"
 
 #------------------------------------------------------------------------
+# difftastic
+#------------------------------------------------------------------------
+if type difft &>/dev/null; then
+    export GIT_EXTERNAL_DIFF="difft --display=inline"
+fi
+
+#------------------------------------------------------------------------
 # direnv
 #------------------------------------------------------------------------
 export DIRENV_WARN_TIMEOUT=30s

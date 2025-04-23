@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -e
+
+git switch -c "fix/${1}"
+git add "*${1}/package.py"
+git commit -m "${1}: update for best practices"
+git push --set-upstream origin "fix/${1}"
+gh --repo spack/spack pr create --title "${1}: update for best practices" --body "Update ${1} to bring up to best practices outlined in the packaging guide."
+git switch -
