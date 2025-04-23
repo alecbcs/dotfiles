@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+#
+# nosleep - Prevents system sleep while executing a command
+# Author: Alec Scott
+#
+# Usage: nosleep [command]
+#        Executes the given command while preventing the system from sleeping
+
+# Display help if no arguments provided
+if [ $# -eq 0 ]; then
+    cat << EOF
+nosleep - Prevents system sleep while executing a command
+
+Usage: nosleep [command]
+       Executes the given command while preventing the system from sleeping
+
+Examples:
+  nosleep npm install     # Run npm install while keeping system awake
+  nosleep make -j4        # Run make with 4 jobs while keeping system awake
+
+Author: Alec Scott
+EOF
+    exit 0
+fi
+
+# Check for available sleep inhibition programs
+if command -v gnome-session-inhibit &>/dev/null; then
+    gnome-session-inhibit --inhibit idle "$@"
+elif command -v caffeinate &>/dev/null; then
+    caffeinate -i "$@"
+else
+    echo "Error: Unable to find a program to inhibit sleep."
+    echo "This program requires either gnome-session-inhibit (Linux) or caffeinate (macOS)."
+    exit 1
+fi

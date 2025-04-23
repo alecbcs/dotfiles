@@ -1,4 +1,0 @@
-#!/usr/bin/env sh
-
-prompt_prefix='%F{blue}alec@laptop%F{reset_color}'
-export prompt='${prompt_prefix}:$(prompt_pwd) $(git_branch)'$'\n''> '

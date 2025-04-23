@@ -190,6 +190,27 @@ shopt -s checkwinsize
 export PS1="\u@\h:\W\$ "
 
 #------------------------------------------------------------------------
+# demo
+#------------------------------------------------------------------------
+demo() {
+  if [[ -z "$ORIGINAL_PROMPT" ]]; then
+    # Save the original prompt
+    export ORIGINAL_PROMPT="$PS1"
+
+    # Set the custom prompt
+    export PS1="alec@laptop:\W\$ "
+
+    echo "Demo mode activated."
+  else
+    # Restore the original prompt
+    export PS1="$ORIGINAL_PROMPT"
+    unset ORIGINAL_PROMPT
+
+    echo "Demo mode deactivated. Original prompt restored."
+  fi
+}
+
+#------------------------------------------------------------------------
 # history
 #------------------------------------------------------------------------
 # append instead of overwrite (good for multiple sessions)
