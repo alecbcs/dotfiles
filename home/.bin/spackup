@@ -39,27 +39,26 @@ fi
 #------------------------------------------------------------------------
 # reconcretize default as the base env
 #------------------------------------------------------------------------
+spack mark -i $(spack -e default find -H)
 spack -e default concretize -f --fresh-roots
 spack -e default install
+spack gc -y
 
 #------------------------------------------------------------------------
 # recompile emacs for compatibility
 #------------------------------------------------------------------------
-emacs --batch --load ~/.emacs.d/init.el --execute '(kill-emacs)' || true
+emacs --batch --load ~/.emacs.d/init.el --execute '(kill-emacs)'
 emacs --batch --load ~/.emacs.d/init.el --execute '(package-recompile-all)'
 
 #------------------------------------------------------------------------
 # reconcretize project environments
 #------------------------------------------------------------------------
 for env in $(spack env ls | grep -v default); do
+    spack mark -i $(spack -e $env find -H)
     spack -e $env concretize -f --fresh-roots
     spack -e $env install
+    spack gc -y
 done
-
-#------------------------------------------------------------------------
-# clean up old packages
-#------------------------------------------------------------------------
-spack gc -Eb
 
 #------------------------------------------------------------------------
 # restore spack working directory state
