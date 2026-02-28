@@ -60,4 +60,4 @@
   (setq native-comp-async-report-warnings-errors nil)
   (setq native-comp-deferred-compilation t))
 
-;;;; early-init.el ends here
+;;; early-init.el ends here

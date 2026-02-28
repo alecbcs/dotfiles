@@ -146,7 +146,7 @@ alias lsla="ls -lah $LS_OPTIONS"
 # ssh
 #------------------------------------------------------------------------
 # alias ssh to custom configuration file to prevent override
-if [ -f $HOME/.ssh/default ]; then
+if [ -f "$HOME/.ssh/default" ]; then
     alias ssh="ssh -F ${HOME}/.ssh/default"
     alias scp="scp -F ${HOME}/.ssh/default"
     alias rsync="rsync -e 'ssh -F ${HOME}/.ssh/default'"

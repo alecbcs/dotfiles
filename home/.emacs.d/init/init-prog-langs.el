@@ -10,7 +10,7 @@
 (use-package treesit-auto
   :ensure t
   :config
-  (setq treesit-auto-install 't)
+  (setq treesit-auto-install t)
   (global-treesit-auto-mode))
 
 (use-package envrc
@@ -26,7 +26,7 @@
   :custom
   (eglot-report-progress nil)
   (eglot-send-changes-idle-time 5)
-  (setq eglot-workspace-configuration
+  (eglot-workspace-configuration
     '((:pylsp . (:plugins (:ruff (:enabled t :lineLength 88
       :formatEnabled t)))))))
 

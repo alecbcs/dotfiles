@@ -49,7 +49,7 @@
   (scroll-step 1)
   (scroll-conservatively 10000)
 
-  ;; default text-mode instead of fundamental mode
+  ;; default to text-mode instead of fundamental mode
   (major-mode 'text-mode)
 
   ;; disable emacs alarms
@@ -243,7 +243,7 @@
   (corfu-auto t)
   (corfu-auto-delay 0.2)
   (corfu-auto-prefix 2)
-  (corfu-auto-cycle t)
+  (corfu-cycle t)
   (corfu-preselect 'prompt)
   (tab-always-indent 'complete)
   :config

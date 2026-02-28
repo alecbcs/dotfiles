@@ -45,7 +45,7 @@ function source_if_exists {
     fi
 }
 
-# Automatically apply --signoff to the relevant commands
+# Automatically apply --signoff to the relevant commands.
 function git {
     case "$1" in
         "commit"|"revert")
@@ -135,7 +135,7 @@ done
 # aspell
 #------------------------------------------------------------------------
 # Dynamically find aspell directory (e.g., aspell-0.60, aspell-0.61, etc.)
-aspell_dir=("${default_env}/lib/aspell-*")
+aspell_dir=("${default_env}"/lib/aspell-*)
 if [ -d "${aspell_dir[0]}" ]; then
     export ASPELL_CONF="dict-dir ${aspell_dir[0]}"
 fi
