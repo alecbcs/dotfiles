@@ -20,8 +20,7 @@
   :mode (("\\.html?\\'" . web-mode)
      ("\\.css\\'"   . web-mode)
      ("\\.jsx?\\'"  . web-mode)
-     ("\\.tsx?\\'"  . web-mode)
-     ("\\.json\\'"  . web-mode))
+     ("\\.tsx?\\'"  . web-mode))
   :config
   (setq web-mode-markup-indent-offset 2) ; HTML
   (setq web-mode-css-indent-offset 2)    ; CSS

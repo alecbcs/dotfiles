@@ -3,6 +3,9 @@
     email = hi@alecbcs.com
     signingkey = E19571E4792E6760
 
+[pull]
+    ff = only
+
 [color]
     ui = auto
 
@@ -42,6 +45,13 @@
         done; \
     }; f"
 
+    bpr = "!f() { \
+        current_branch=$(git rev-parse --abbrev-ref HEAD); \
+        current_remote=$(git config --get branch.${current_branch}.remote); \
+        git fetch $current_remote pull/${1}/head:pr-${1}; \
+        git switch pr-${1}; \
+    }; f"
+
     # go to the github/gitlab page for this repo
     go = "!f() { \
         url=$(git remote -v | grep '^origin\\|^github\\|^gitlab' | \
@@ -64,9 +74,6 @@
 
 [fetch]
     prune = true
-
-[pull]
-    ff = only
 
 [init]
     defaultBranch = main

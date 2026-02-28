@@ -13,10 +13,12 @@ window-width = 110
 #------------------------------------------------------------------------
 background = 141414
 foreground = ffffff
-theme = zenbones_dark
+theme = Zenbones Dark
 
 font-family = JetBrains Mono
 font-size = 14
+font-thicken = true
+font-thicken-strength = 0
 
 shell-integration-features = no-cursor
 cursor-style = block
@@ -27,6 +29,7 @@ mouse-scroll-multiplier = "0.5"
 # MacOS
 #------------------------------------------------------------------------
 macos-secure-input-indication = false
+macos-auto-secure-input = true
 macos-icon = custom-style
 macos-icon-screen-color = 151C1F,151C1F
 macos-icon-ghost-color = ffffff

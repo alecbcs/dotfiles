@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-bulitin==$(spack config get --json repos | jq .repos.builtin.destination)
+builtin=$(spack config get --json repos | jq .repos.builtin.destination | tr -d \")
 
 cd $builtin
 

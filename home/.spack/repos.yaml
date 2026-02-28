@@ -1,0 +1,4 @@
+repos:
+  builtin:
+    branch: develop
+    destination: $HOME/src/spack/spack-packages

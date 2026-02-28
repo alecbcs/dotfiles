@@ -9,46 +9,53 @@
 ;; ===========================================================================
 (use-package treesit-auto
   :ensure t
-  :custom
-  (treesit-auto-install 't)
+  :config
+  (setq treesit-auto-install 't)
   (global-treesit-auto-mode))
 
 (use-package envrc
   :ensure t
-  :custom
+  :defer nil
+  :config
   (envrc-global-mode))
 
 (use-package eglot
   :ensure t
+  :config
+  (fset #'jsonrpc--log-event #'ignore)
   :custom
   (eglot-report-progress nil)
-  (eglot-send-changes-idle-time 3)
-  (fset #'jsonrpc--log-event #'ignore)
+  (eglot-send-changes-idle-time 5)
   (setq eglot-workspace-configuration
     '((:pylsp . (:plugins (:ruff (:enabled t :lineLength 88
       :formatEnabled t)))))))
 
 (use-package flycheck
   :ensure t
-  :custom
+  :config
   (global-flycheck-mode))
 
 (use-package flycheck-eglot
   :ensure t
   :after (flycheck eglot)
-  :custom
-  (global-flycheck-eglot-mode 1)
-  (eglot-events-buffer-config '(:size 0)))
+  :config
+  (setq eglot-events-buffer-config '(:size 0))
+  (global-flycheck-eglot-mode 1))
+
+(use-package magit
+  :ensure t
+  :defer nil)
 
 ;; ===========================================================================
 ;; Python
 ;; ===========================================================================
 (use-package python-mode
   :ensure t
-  :defer t
   :hook
   (python-mode . eglot-ensure)
-  (python-ts-mode . eglot-ensure))
+  (python-ts-mode . eglot-ensure)
+  (python-mode . (lambda () (add-hook 'before-save-hook #'eglot-format-buffer nil t)))
+  (python-ts-mode . (lambda () (add-hook 'before-save-hook #'eglot-format-buffer nil t))))
 
 ;; ===========================================================================
 ;; Go
@@ -61,11 +68,11 @@
   :hook
   (go-mode . eglot-ensure)
   (go-ts-mode . eglot-ensure)
-  (before-save . eglot-format-buffer))
+  (go-mode . (lambda () (add-hook 'before-save-hook #'eglot-format-buffer nil t)))
+  (go-ts-mode . (lambda () (add-hook 'before-save-hook #'eglot-format-buffer nil t))))
 
 (use-package gotest
   :ensure t
-  :defer t
   :after go-mode)
 
 ;; ===========================================================================
@@ -90,7 +97,6 @@
 ;; ===========================================================================
 (use-package yaml-mode
   :ensure t
-  :defer t
   :mode ("\\.ya?ml\\'" . yaml-mode))
 
 ;; ===========================================================================
@@ -98,7 +104,8 @@
 ;; ===========================================================================
 (use-package json-mode
   :ensure t
-  :defer t)
+  :custom
+  (js-indent-level 2))
 
 (provide 'init-prog-langs)
 

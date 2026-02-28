@@ -5,6 +5,8 @@
 spack:
   # add package specs to the `specs` list
   specs:
+  - aspell
+  - aspell6-en
   - coreutils
   - difftastic
   - direnv
@@ -30,6 +32,11 @@ spack:
   - rsync
   - rust+dev
   - tree
-  view: true
+  - typos
+  - zoxide
+  view:
+    default:
+      root: .spack-env/view
+      link: run
   concretizer:
     unify: true

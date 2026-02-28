@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 #========================================================================
 # Rebuild Spack Environments
@@ -28,13 +29,16 @@ fi
 # update spack
 #------------------------------------------------------------------------
 git fetch upstream
-reslog=$(git log HEAD..upstream/develop --oneline)
-if [[ "${reslog}" != "" ]] ; then
-    git pull
-else
-    echo "Already up-to-date"
-    #exit 0
+
+current_branch=$(git -C ~/src/spack/spack rev-parse --abbrev-ref HEAD)
+if [[ "$current_branch" == "develop" ]]; then
+    git pull --rebase
 fi
+
+#------------------------------------------------------------------------
+# update spack builtin repo
+#------------------------------------------------------------------------
+spack repo update
 
 #------------------------------------------------------------------------
 # reconcretize default as the base env
@@ -54,11 +58,14 @@ emacs --batch --load ~/.emacs.d/init.el --execute '(package-recompile-all)'
 # reconcretize project environments
 #------------------------------------------------------------------------
 for env in $(spack env ls | grep -v default); do
-    spack mark -i $(spack -e $env find -H)
     spack -e $env concretize -f --fresh-roots
     spack -e $env install
-    spack gc -by
 done
+
+#------------------------------------------------------------------------
+# garbage collect all unused specs
+#------------------------------------------------------------------------
+spack gc -Eby
 
 #------------------------------------------------------------------------
 # restore spack working directory state

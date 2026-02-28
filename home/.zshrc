@@ -9,9 +9,8 @@ AFTER_COMPINIT=()
 pathadd "/opt/homebrew/bin"
 
 # Add brew auto-completions to zsh lookup path
-if type brew &>/dev/null; then
-   HOMEBREW_PREFIX=$(brew --prefix 2>/dev/null)
-   pathadd fpath "${HOMEBREW_PREFIX}/share/zsh/site-functions"
+if [ -n "$HOMEBREW_PREFIX" ]; then
+   pathadd FPATH "${HOMEBREW_PREFIX}/share/zsh/site-functions"
 fi
 
 #------------------------------------------------------------------------
@@ -22,17 +21,18 @@ export SPACK_ROOT="${HOME}/src/spack/spack"
 
 default_env="${HOME}/.spack/environments/default/.spack-env/view"
 
-if [ -x ${SPACK_ROOT} ]; then
-    export PYTHONPATH="${SPACK_ROOT}/lib/spack:$PYTHONPATH"
+if [ -d "${SPACK_ROOT}" ]; then
+    pathadd PYTHONPATH "${SPACK_ROOT}/lib/spack/spack/vendor"
+    pathadd PYTHONPATH "${SPACK_ROOT}/lib/spack"
     alias cdsp="cd ${SPACK_ROOT}"
 fi
 
-if [ -x ${default_env}/bin/python ]; then
+if [ -f "${default_env}/bin/python" ]; then
     export SPACK_PYTHON=${default_env}/bin/python
 fi
 
 pathadd "${default_env}/bin"
-pathadd fpath "${default_env}/share/zsh/site-functions"
+pathadd FPATH "${default_env}/share/zsh/site-functions"
 
 # Run Spack setup-env.sh after compinit to use zcompcache
 AFTER_COMPINIT+=("${HOME}/src/spack/spack/share/spack/setup-env.sh")
@@ -41,6 +41,15 @@ AFTER_COMPINIT+=("${HOME}/src/spack/spack/share/spack/setup-env.sh")
 # ~/.bin
 #------------------------------------------------------------------------
 pathadd "${HOME}/.bin"
+
+#------------------------------------------------------------------------
+# aspell
+#------------------------------------------------------------------------
+# Dynamically find aspell directory (e.g., aspell-0.60, aspell-0.61, etc.)
+aspell_dir=(${default_env}/lib/aspell-*(N))
+if [ ${#aspell_dir[@]} -gt 0 ]; then
+    export ASPELL_CONF="dict-dir ${aspell_dir[1]}"
+fi
 
 #------------------------------------------------------------------------
 # difftastic
@@ -69,6 +78,14 @@ if type fzf &>/dev/null; then
 fi
 
 #------------------------------------------------------------------------
+# zoxide
+#------------------------------------------------------------------------
+if type zoxide &>/dev/null; then
+    eval "$(zoxide init zsh)"
+    alias cd="z"
+fi
+
+#------------------------------------------------------------------------
 # go
 #------------------------------------------------------------------------
 export GOPATH="${HOME}/go"
@@ -83,7 +100,17 @@ pathadd "${HOME}/.local/bin"
 # editors
 #------------------------------------------------------------------------
 # Set system editor.
-export EDITOR="emacsclient -nw -a ''"
+# Emacs is our most preferred editor
+if type emacsclient &>/dev/null; then
+    export EDITOR="emacsclient -nw -a ''"
+
+elif type mg &>/dev/null; then
+    export EDITOR="mg"
+
+else
+    export EDITOR="vi"
+fi
+
 
 # Emacs setup
 # Various emacs aliases.
@@ -141,8 +168,17 @@ ZSH_AUTOSUGGEST_HISTORY_IGNORE="(cd|cat|e|git|ls) *"
 
 setopt prompt_subst
 
-PROMPT_PREFIX='%F{blue}%n@%m%F{reset_color}'
-export PROMPT='${PROMPT_PREFIX}:$(prompt_pwd) $(git_branch)'$'\n''> '
+# Set up vcs_info for git branch display (faster than spawning git process)
+autoload -Uz vcs_info
+precmd_vcs_info() { vcs_info }
+precmd_functions+=( precmd_vcs_info )
+zstyle ':vcs_info:git:*' formats '(%b)'
+zstyle ':vcs_info:*' enable git
+
+PROMPT_COLOR="$(get_host_color)"
+PROMPT_PREFIX="%F{$PROMPT_COLOR}%n@%m%F{reset_color}"
+# Use vcs_info_msg_0_ directly to avoid subprocess for git_branch function
+export PROMPT='${PROMPT_PREFIX}:$(prompt_pwd) ${vcs_info_msg_0_}'$'\n''> '
 
 
 
@@ -183,6 +219,7 @@ export SAVEHIST=10000          # save history after logout
 setopt INC_APPEND_HISTORY      # append into history file
 setopt HIST_IGNORE_DUPS        # save only one command if 2 are same
 setopt EXTENDED_HISTORY        # add timestamp for each entry
+setopt SHARE_HISTORY           # share history across shells
 
 #------------------------------------------------------------------------
 # other settings

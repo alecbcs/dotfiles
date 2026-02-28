@@ -11,6 +11,7 @@ home/.config/*
 # Emacs
 # ------------------------------------------------------
 home/.emacs.d/*
+!home/.emacs.d/early-init.el
 !home/.emacs.d/init.el
 !home/.emacs.d/init/*
 !home/.emacs.d/twilight-theme.el
@@ -20,6 +21,7 @@ home/.emacs.d/*
 # ------------------------------------------------------
 home/.spack/*
 !home/.spack/config.yaml
+!home/.spack/repos.yaml
 !home/.spack/environments/default/spack.yaml
 
 # ------------------------------------------------------

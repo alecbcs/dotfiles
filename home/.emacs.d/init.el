@@ -6,25 +6,6 @@
 ;;;; Code:
 
 ;; ===========================================================================
-;; Setup Package Managers
-;; ===========================================================================
-(require 'package)
-(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
-(setq package-enable-at-startup nil)
-(package-initialize)
-
-;; set up the package manager or install if missing
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-(eval-and-compile
-  (setq use-package-always-ensure t)
-  (setq use-package-verbose nil)
-  (setq use-package-compute-statistics nil))
-
-;; ===========================================================================
 ;; General Options
 ;; ===========================================================================
 (use-package emacs
@@ -38,7 +19,7 @@
   ;; auto close bracket insertion
   (electric-pair-mode 1)
 
-  ;; automatically make scripts executable if they have shebant (#!) in them
+  ;; automatically make scripts executable if they have shebang (#!) in them
   (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
 
   ;; add additional key binding for ansi-term
@@ -46,9 +27,6 @@
 
   ;; set tramp to use .ssh/config settings
   (customize-set-variable 'tramp-use-ssh-controlmaster-options nil)
-
-  ;; enable spellcheck
-  (defconst *spell-check-support-enabled* t)
 
   ;; load theme
   (load-theme 'twilight t)
@@ -60,10 +38,19 @@
   ;; remove trailing whitespace
   (before-save . delete-trailing-whitespace)
 
+  ;; enable line numbers in programming modes
+  (prog-mode . display-line-numbers-mode)
+
   :custom
+  ;; prevent line number column from shifting text left/right
+  (display-line-numbers-width-start t)
+
   ;; scroll one line at a time
   (scroll-step 1)
   (scroll-conservatively 10000)
+
+  ;; default text-mode instead of fundamental mode
+  (major-mode 'text-mode)
 
   ;; disable emacs alarms
   (ring-bell-function 'ignore)
@@ -79,7 +66,7 @@
   (tab-width 4)
   (indent-line-function 'insert-tab)
 
-  ;; enfoce a final newline in files
+  ;; enforce a final newline in files
   (require-final-newline t)
 
   ;; when using a mac allow option key as meta
@@ -87,8 +74,8 @@
     (mac-command-modifier 'super)
     (mac-option-modifier 'meta))
 
-  ;; don't use customize
-  (custom-file null-device)
+  ;; use custom file in emacs directory
+  (custom-file (expand-file-name "custom.el" user-emacs-directory))
 
   ;; enable visual line mode
   (visual-line-mode 1)
@@ -118,15 +105,6 @@
   (gcmh-high-cons-threshold 16777216)) ;; 16MB
 
 ;; ===========================================================================
-;; $PATH within Emacs
-;; ===========================================================================
-;; import $PATH from the external shell env
-(use-package exec-path-from-shell
-  :ensure t
-  :init
-  (exec-path-from-shell-initialize))
-
-;; ===========================================================================
 ;; Load Additional Configuration Files
 ;; ===========================================================================
 (require 'init-org)
@@ -140,8 +118,25 @@
 ;; ===========================================================================
 (use-package xclip
   :ensure t
+  :defer nil
   :config
-  (xclip-mode 1))
+  (ignore-errors (xclip-mode 1)))
+
+(use-package flyspell
+  :ensure t
+  :hook
+  (text-mode . (lambda () (let ((inhibit-message t)) (flyspell-mode))))
+  (prog-mode . (lambda () (let ((inhibit-message t)) (flyspell-prog-mode))))
+  :config
+  (setq flyspell-issue-message-flag nil)
+  (global-set-key (kbd "C-\\") 'save-word)
+  (defun save-word ()
+    (interactive)
+    (let ((current-location (point))
+          (word (flyspell-get-word)))
+      (when (consp word)
+        (flyspell-do-correct 'save nil (car word) current-location
+                             (cadr word) (caddr word) current-location)))))
 
 (use-package simple
   :ensure nil
@@ -164,7 +159,7 @@
   :config
   (global-auto-revert-mode +1)
   :custom
-  (auto-revert-interval 2)
+  (auto-revert-interval 5)
   (auto-revert-check-vc-info t)
   (global-auto-revert-non-file-buffers t)
   (auto-revert-verbose nil))
@@ -180,15 +175,25 @@
   :ensure t
   :hook (before-save . whitespace-cleanup))
 
+(use-package olivetti
+  :ensure t
+  :hook
+  (markdown-mode . olivetti-mode)
+  (org-mode . olivetti-mode)
+  (rst-mode . olivetti-mode)
+  :custom
+  (olivetti-body-width 80))
 
 (use-package vertico
   :ensure t
+  :defer nil
+  :config
+  (vertico-mode 1)
   :custom
   (vertico-count 10)
   (vertico-cycle t)
   (vertico-resize nil)
-  (vertico-preselect 'first)
-  (vertico-mode 1))
+  (vertico-preselect 'first))
 
 (use-package vertico-directory
   :after vertico
@@ -233,14 +238,21 @@
 
 (use-package corfu
   :ensure t
+  :defer nil
   :custom
   (corfu-auto t)
+  (corfu-auto-delay 0.2)
+  (corfu-auto-prefix 2)
+  (corfu-auto-cycle t)
+  (corfu-preselect 'prompt)
   (tab-always-indent 'complete)
-  :init
+  :config
   (global-corfu-mode))
 
 (use-package corfu-terminal
   :ensure t
+  :after corfu
+  :defer nil
   :config
   ;; use corfu-terminal when not running as graphical emacs
   (unless (display-graphic-p) (corfu-terminal-mode +1)))
@@ -248,13 +260,21 @@
 (use-package cape
   :ensure t
   :after corfu
-  :hook
-  (completion-at-point-functions . cape-file))
+  :init
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  :custom
+  (cape-dabbrev-min-length 3))
 
 (use-package rg
   :ensure t
   :config
   (rg-enable-default-bindings)
   (rg-enable-menu))
+
+(use-package whole-line-or-region
+  :ensure t
+  :custom
+  (whole-line-or-region-global-mode t))
 
 ;;; init.el ends here

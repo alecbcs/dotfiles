@@ -41,6 +41,9 @@ set -x
 # use function keys as standard function keys
 defaults write com.apple.keyboard.fnState -int 1
 
+# enable moving focus for keyboard navigation
+defaults write NSGlobalDomain AppleKeyboardUIMode -int "2"
+
 # dynamically show scrollbars
 defaults write NSGlobalDomain AppleShowScrollBars -string "WhenScrolling"
 # possible values: `WhenScrolling`, `Automatic` and `Always`
@@ -92,9 +95,11 @@ defaults write com.apple.screencapture location -string "${HOME}/Desktop"
 # save screenshots in PNG format (other options: BMP, GIF, JPG, PDF, TIFF)
 defaults write com.apple.screencapture type -string "png"
 
+# save screenshots with the date in their name
+defaults write com.apple.screencapture "include-date" -bool "true"
+
 # disable shadow in screenshots
 defaults write com.apple.screencapture disable-shadow -bool true
-
 
 ###############################################################################
 # Finder                                                                      #
@@ -298,6 +303,13 @@ defaults write com.apple.terminal "Startup Window Settings" -string "default"
 # set default iTerm2 profile
 defaults write com.googlecode.iterm2 "PrefsCustomFolder" -string "${HOME}/src/${USER}/dotfiles/osx/"
 defaults write com.googlecode.iterm2 "LoadPrefsFromCustomFolder" -bool true
+
+###############################################################################
+# Apple Intelligence                                                          #
+###############################################################################
+
+# disable Apple Intelligence by default
+defaults write com.apple.CloudSubscriptionFeatures.optIn "545129924" -bool "false"
 
 ###############################################################################
 # Time Machine                                                                #

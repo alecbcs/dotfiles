@@ -20,7 +20,8 @@ function pathadd {
     if [ -d "$_pa_new_path" ] && [[ ":$_pa_oldvalue:" != *":$_pa_new_path:"* ]];
     then
         # Convert path to absolute path if it is not one.
-        _pa_new_path=$(cd $_pa_new_path && pwd)
+        # Use realpath for performance (faster than cd in subshell)
+        _pa_new_path=$(realpath "$_pa_new_path" 2>/dev/null || echo "$_pa_new_path")
 
         # Add it to the PATH.
         if [ -n "$_pa_oldvalue" ]; then
@@ -44,6 +45,29 @@ function source_if_exists {
     fi
 }
 
+# Automatically apply --signoff to the relevant commands
+function git {
+    case "$1" in
+        "commit"|"revert")
+            cmd=$1
+            shift
+            command git $cmd --signoff "$@"
+            ;;
+        "rebase")
+            shift
+            # Don't add --signoff for continue/skip/abort
+            if [[ $1 == "--continue" ]] || [[ $1 == "--skip" ]] || [[ $1 == "--abort" ]]; then
+                command git rebase "$@"
+            else
+                command git rebase --signoff "$@"
+            fi
+            ;;
+        *)
+            command git "$@"
+            ;;
+    esac
+}
+
 # Disable stupid X11 programs that ask for your ssh password.
 export SSH_ASKPASS=
 
@@ -51,18 +75,37 @@ source_if_exists /etc/lc.bashrc
 source_if_exists /etc/bashrc
 
 #------------------------------------------------------------------------
+# brew
+#------------------------------------------------------------------------
+pathadd "/opt/homebrew/bin"
+
+# Cache homebrew prefix for performance
+if type brew &>/dev/null && [ -z "$HOMEBREW_PREFIX" ]; then
+    export HOMEBREW_PREFIX=$(brew --prefix)
+fi
+
+#------------------------------------------------------------------------
 # spack
 #------------------------------------------------------------------------
 export SPACK_SKIP_MODULES=1
-source_if_exists "${HOME}/src/spack/spack/share/spack/setup-env.sh"
+export SPACK_ROOT="${HOME}/src/spack/spack"
 
 default_env="${HOME}/.spack/environments/default/.spack-env/view"
 
+if [ -d "${SPACK_ROOT}" ]; then
+    pathadd PYTHONPATH "${SPACK_ROOT}/lib/spack/spack/vendor"
+    pathadd PYTHONPATH "${SPACK_ROOT}/lib/spack"
+    alias cdsp="cd ${SPACK_ROOT}"
+fi
+
+if [ -f "${default_env}/bin/python" ]; then
+    export SPACK_PYTHON=${default_env}/bin/python
+fi
+
 pathadd "${default_env}/bin"
-pathadd PYTHONPATH "${SPACK_ROOT}/lib/spack"
 pathadd BCPATH "${default_env}/share/bash-completion/completions"
 
-alias cdsp="cd ${SPACK_ROOT}"
+source_if_exists "${HOME}/src/spack/spack/share/spack/setup-env.sh"
 
 #------------------------------------------------------------------------
 # ~/.bin
@@ -87,6 +130,15 @@ for dir in $BCPATH; do
         source_if_exists $comp
     done
 done
+
+#------------------------------------------------------------------------
+# aspell
+#------------------------------------------------------------------------
+# Dynamically find aspell directory (e.g., aspell-0.60, aspell-0.61, etc.)
+aspell_dir=("${default_env}/lib/aspell-*")
+if [ -d "${aspell_dir[0]}" ]; then
+    export ASPELL_CONF="dict-dir ${aspell_dir[0]}"
+fi
 
 #------------------------------------------------------------------------
 # difftastic
@@ -115,6 +167,14 @@ if type fzf &>/dev/null; then
 fi
 
 #------------------------------------------------------------------------
+# zoxide
+#------------------------------------------------------------------------
+if type zoxide &>/dev/null; then
+    eval "$(zoxide init bash)"
+    alias cd="z"
+fi
+
+#------------------------------------------------------------------------
 # go
 #------------------------------------------------------------------------
 export GOPATH="${HOME}/go"
@@ -129,7 +189,16 @@ pathadd "${HOME}/.local/bin"
 # editors
 #------------------------------------------------------------------------
 # Set system editor.
-export EDITOR="emacsclient -nw -a ''"
+# Emacs is our most preferred editor
+if type emacsclient &>/dev/null; then
+    export EDITOR="emacsclient -nw -a ''"
+
+elif type mg &>/dev/null; then
+    export EDITOR="mg"
+
+else
+    export EDITOR="vi"
+fi
 
 # Emacs setup
 # Various emacs aliases.
@@ -156,7 +225,9 @@ elif ls -G -d . >/dev/null 2>&1; then
 fi
 
 alias ls="ls $LS_OPTIONS"
+alias lst="ls -t $LS_OPTIONS"
 alias ll="ls -lh $LS_OPTIONS"
+alias llt="ls -lht $LS_OPTIONS"
 alias lsla="ls -la $LS_OPTIONS"
 
 #------------------------------------------------------------------------
@@ -164,8 +235,11 @@ alias lsla="ls -la $LS_OPTIONS"
 #------------------------------------------------------------------------
 # alias ssh to custom configuration file to prevent override
 if [ -f $HOME/.ssh/default ]; then
-    alias ssh="ssh -F $HOME/.ssh/default"
-    export GIT_SSH_COMMAND="ssh -F $HOME/.ssh/default"
+    alias ssh="ssh -F ${HOME}/.ssh/default"
+    alias scp="scp -F ${HOME}/.ssh/default"
+    alias rsync="rsync -e 'ssh -F ${HOME}/.ssh/default'"
+
+    export GIT_SSH_COMMAND="ssh -F ${HOME}/.ssh/default"
 fi
 
 # manually forward agent when required and ignore existing connections
