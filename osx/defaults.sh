@@ -60,6 +60,9 @@ defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 # disable app bouncing on the dock
 defaults write com.apple.dock no-bouncing -bool true
 
+# disable Tahoe menu icons that are everywhere
+defaults write NSGlobalDomain NSMenuEnableActionImages -bool false
+
 ###############################################################################
 # Trackpad, mouse, keyboard                                                   #
 ###############################################################################
@@ -80,6 +83,9 @@ defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true
 # set a fast keyboard repeat rate
 defaults write NSGlobalDomain KeyRepeat -int 3
 defaults write NSGlobalDomain InitialKeyRepeat -int 10
+
+# install custom keybindings for additional emacs shortcuts
+cp "$(dirname $0)/DefaultKeyBinding.dict" ~/Library/KeyBindings/DefaultKeyBinding.dict
 
 ###############################################################################
 # Screen                                                                      #
