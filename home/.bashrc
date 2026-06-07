@@ -79,10 +79,9 @@ source_if_exists /etc/bashrc
 #------------------------------------------------------------------------
 pathadd "/opt/homebrew/bin"
 
-# Cache homebrew prefix for performance
-if type brew &>/dev/null && [ -z "$HOMEBREW_PREFIX" ]; then
-    export HOMEBREW_PREFIX=$(brew --prefix)
-fi
+# Hardcode brew prefix to reduce shell load time. This could be wrong
+# for homebrew on Linux installs or for machines that are Apple Silicon
+export HOMEBREW_PREFIX=/opt/homebrew
 
 #------------------------------------------------------------------------
 # spack
@@ -102,10 +101,23 @@ if [ -f "${default_env}/bin/python" ]; then
     export SPACK_PYTHON=${default_env}/bin/python
 fi
 
+pathadd "${SPACK_ROOT}/bin"
 pathadd "${default_env}/bin"
-pathadd BCPATH "${default_env}/share/bash-completion/completions"
 
-source_if_exists "${HOME}/src/spack/spack/share/spack/setup-env.sh"
+# Expose the default environments completions to bash-completion's on-demand
+# loader rather than eagerly sourcing them. For each XDG_DATA_DIRS entry it
+# searches <entry>/bash-completion/completions/<cmd> and loads a completion
+# only when that command is first used.
+pathadd XDG_DATA_DIRS "${default_env}/share"
+
+# Lazy-load Spack: setup-env.sh is the heavy part and isn't needed until the
+# first `spack` invocation. The stub sources it once, then setup-env.sh
+# redefines `spack` over this function.
+spack() {
+    unset -f spack
+    source_if_exists "${HOME}/src/spack/spack/share/spack/setup-env.sh"
+    spack "$@"
+}
 
 #------------------------------------------------------------------------
 # ~/.bin
@@ -125,11 +137,6 @@ esac
 # bash autocompletion
 #------------------------------------------------------------------------
 source_if_exists /etc/bash_completion
-for dir in $BCPATH; do
-    for comp in "${dir}"*; do
-        source_if_exists $comp
-    done
-done
 
 #------------------------------------------------------------------------
 # aspell
