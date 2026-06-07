@@ -29,6 +29,7 @@ if [ -f "${default_env}/bin/python" ]; then
     export SPACK_PYTHON=${default_env}/bin/python
 fi
 
+pathadd "${SPACK_ROOT}/bin"
 pathadd "${default_env}/bin"
 pathadd FPATH "${default_env}/share/zsh/site-functions"
 
