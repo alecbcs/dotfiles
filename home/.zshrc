@@ -1,8 +1,6 @@
 #========================================================================
 # ZSH Config
 #========================================================================
-AFTER_COMPINIT=()
-
 #------------------------------------------------------------------------
 # brew
 #------------------------------------------------------------------------
@@ -34,8 +32,15 @@ fi
 pathadd "${default_env}/bin"
 pathadd FPATH "${default_env}/share/zsh/site-functions"
 
-# Run Spack setup-env.sh after compinit to use zcompcache
-AFTER_COMPINIT+=("${HOME}/src/spack/spack/share/spack/setup-env.sh")
+# Lazy-load spack shell integration on first use
+if [ -f "${SPACK_ROOT}/share/spack/setup-env.sh" ]; then
+    spack() {
+        unfunction spack
+        bashcompinit
+        source "${SPACK_ROOT}/share/spack/setup-env.sh"
+        spack "$@"
+    }
+fi
 
 #------------------------------------------------------------------------
 # ~/.bin
@@ -121,7 +126,7 @@ alias e="$EDITOR"
 #------------------------------------------------------------------------
 # gpg
 #------------------------------------------------------------------------
-export GPG_TTY=$(tty)
+export GPG_TTY=$TTY
 
 #------------------------------------------------------------------------
 # ls
@@ -171,15 +176,15 @@ setopt prompt_subst
 # Set up vcs_info for git branch display (faster than spawning git process)
 autoload -Uz vcs_info
 precmd_vcs_info() { vcs_info }
-precmd_functions+=( precmd_vcs_info )
+precmd_prompt_pwd() { prompt_pwd; psvar[1]=$REPLY }
+precmd_functions+=( precmd_vcs_info precmd_prompt_pwd )
 zstyle ':vcs_info:git:*' formats '(%b)'
 zstyle ':vcs_info:*' enable git
 
 PROMPT_COLOR="$(get_host_color)"
 PROMPT_PREFIX="%F{$PROMPT_COLOR}%n@%m%F{reset_color}"
 # Use vcs_info_msg_0_ directly to avoid subprocess for git_branch function
-export PROMPT='${PROMPT_PREFIX}:$(prompt_pwd) ${vcs_info_msg_0_}'$'\n''> '
-
+export PROMPT='${PROMPT_PREFIX}:%1v ${vcs_info_msg_0_}'$'\n''> '
 
 
 #------------------------------------------------------------------------
@@ -237,10 +242,8 @@ alias cddot='cd ${HOME}/src/${USER}/dotfiles/'
 # zsh tab completions
 #------------------------------------------------------------------------
 autoload -Uz compinit bashcompinit
-compinit
-bashcompinit
-
-# Source bash scripts after compinit
-for script in $AFTER_COMPINIT; do
-    source_if_exists $script
-done
+if [[ -n ~/.zcompdump(#qNmh-24) ]]; then
+    compinit -C
+else
+    compinit
+fi
