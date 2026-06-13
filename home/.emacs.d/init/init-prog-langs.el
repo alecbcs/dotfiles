@@ -7,11 +7,15 @@
 ;; ===========================================================================
 ;; Common Development Tools
 ;; ===========================================================================
-(use-package treesit-auto
-  :ensure t
-  :config
-  (setq treesit-auto-install t)
-  (global-treesit-auto-mode))
+(use-package treesit
+  :ensure nil
+  :when (treesit-available-p)
+  :custom
+  (major-mode-remap-alist
+   '((go-mode . go-ts-mode)
+     (json-mode . json-ts-mode)
+     (python-mode . python-ts-mode)
+     (rust-mode . rust-ts-mode))))
 
 (use-package envrc
   :ensure t
@@ -22,25 +26,37 @@
 (use-package eglot
   :ensure t
   :config
-  (fset #'jsonrpc--log-event #'ignore)
+  (remove-hook 'jsonrpc-event-hook #'jsonrpc--log-event)
+  (add-to-list 'eglot-server-programs
+               '((python-ts-mode python-mode)
+                 . ("rass" "--" "pylsp" "--" "ty" "server" "--" "ruff" "server")))
+  :hook
+  (eglot-managed-mode . eglot-ensure)
   :custom
+  (eglot-events-buffer-config '(:size 0))
   (eglot-report-progress nil)
   (eglot-send-changes-idle-time 5)
-  (eglot-workspace-configuration
-    '((:pylsp . (:plugins (:ruff (:enabled t :lineLength 88
-      :formatEnabled t)))))))
+  (eglot-ignore-server-capabilities '(:inlayHintProvider :signatureHelpProvider)))
 
-(use-package flycheck
-  :ensure t
-  :config
-  (global-flycheck-mode))
+(use-package flymake
+  :ensure nil
+  :hook
+  (prog-mode . flymake-mode)
+  (flymake-mode . (lambda ()
+                    (setq-local eldoc-documentation-functions
+                                (cons #'flymake-eldoc-function
+                                      (remove #'flymake-eldoc-function
+                                              eldoc-documentation-functions))))))
 
-(use-package flycheck-eglot
+(use-package apheleia
   :ensure t
-  :after (flycheck eglot)
+  :demand t
   :config
-  (setq eglot-events-buffer-config '(:size 0))
-  (global-flycheck-eglot-mode 1))
+  (setf (alist-get 'python-mode apheleia-mode-alist)
+        '(ruff-isort ruff))
+  (setf (alist-get 'python-ts-mode apheleia-mode-alist)
+        '(ruff-isort ruff))
+  (apheleia-global-mode +1))
 
 (use-package magit
   :ensure t
@@ -53,9 +69,7 @@
   :ensure t
   :hook
   (python-mode . eglot-ensure)
-  (python-ts-mode . eglot-ensure)
-  (python-mode . (lambda () (add-hook 'before-save-hook #'eglot-format-buffer nil t)))
-  (python-ts-mode . (lambda () (add-hook 'before-save-hook #'eglot-format-buffer nil t))))
+  (python-ts-mode . eglot-ensure))
 
 ;; ===========================================================================
 ;; Go
@@ -67,9 +81,7 @@
   (go-mode-indent-offset 4)
   :hook
   (go-mode . eglot-ensure)
-  (go-ts-mode . eglot-ensure)
-  (go-mode . (lambda () (add-hook 'before-save-hook #'eglot-format-buffer nil t)))
-  (go-ts-mode . (lambda () (add-hook 'before-save-hook #'eglot-format-buffer nil t))))
+  (go-ts-mode . eglot-ensure))
 
 (use-package gotest
   :ensure t
@@ -81,16 +93,10 @@
 (use-package rust-mode
   :ensure t
   :custom
-  (rust-format-on-save t)
+  (rust-format-on-save nil)
   :hook
   (rust-mode . eglot-ensure)
   (rust-ts-mode . eglot-ensure))
-
-(use-package flycheck-rust
-  :ensure t
-  :after (flycheck rust-mode)
-  :hook
-  (flycheck-mode . flycheck-rust-setup))
 
 ;; ===========================================================================
 ;; YAML

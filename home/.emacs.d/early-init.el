@@ -50,7 +50,9 @@
 ;; Restore file handlers after startup
 (add-hook 'emacs-startup-hook
   (lambda ()
-    (setq file-name-handler-alist file-name-handler-alist-original)))
+    (setq file-name-handler-alist
+          (delete-dups
+           (append file-name-handler-alist file-name-handler-alist-original)))))
 
 ;; ===========================================================================
 ;; Native Compilation (Emacs 28+)

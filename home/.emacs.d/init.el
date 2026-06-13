@@ -34,6 +34,11 @@
   ;; add the location on additional configs
   (add-to-list 'load-path (expand-file-name "init" user-emacs-directory))
 
+  ;; when using a mac allow option key as meta
+  (when (eq system-type 'darwin)
+    (setq mac-command-modifier 'super
+          mac-option-modifier 'meta))
+
   :hook
   ;; remove trailing whitespace
   (before-save . delete-trailing-whitespace)
@@ -69,11 +74,6 @@
   ;; enforce a final newline in files
   (require-final-newline t)
 
-  ;; when using a mac allow option key as meta
-  (when (equal system-type 'darwin)
-    (mac-command-modifier 'super)
-    (mac-option-modifier 'meta))
-
   ;; use custom file in emacs directory
   (custom-file (expand-file-name "custom.el" user-emacs-directory))
 
@@ -82,6 +82,9 @@
 
   ;; enforce eldoc to only use a single line
   (eldoc-echo-area-use-multiline-p nil)
+
+  ;; shorten the time to showing eldoc
+  (eldoc-idle-delay 0.2)
 
   ;; hide commands from M-x that aren't possible
   (read-extended-command-predicate #'command-completion-default-include-p)
@@ -98,6 +101,7 @@
 ;; ===========================================================================
 (use-package gcmh
   :ensure t
+  :defer nil
   :config
   (gcmh-mode 1)
   :custom
@@ -124,12 +128,12 @@
 
 (use-package flyspell
   :ensure t
+  :bind (("C-\\" . save-word))
   :hook
   (text-mode . (lambda () (let ((inhibit-message t)) (flyspell-mode))))
   (prog-mode . (lambda () (let ((inhibit-message t)) (flyspell-prog-mode))))
   :config
   (setq flyspell-issue-message-flag nil)
-  (global-set-key (kbd "C-\\") 'save-word)
   (defun save-word ()
     (interactive)
     (let ((current-location (point))
@@ -171,10 +175,6 @@
   :custom
   (show-paren-delay 0))
 
-(use-package whitespace
-  :ensure t
-  :hook (before-save . whitespace-cleanup))
-
 (use-package olivetti
   :ensure t
   :hook
@@ -199,12 +199,13 @@
   :after vertico
   :ensure nil ;; no need to install, comes with vertico
   :bind (:map vertico-map
-    ("RET"   . vertico-directory-enter)
-    ("DEL"   . vertico-directory-delete-char)
-    ("M-DEL" . vertico-directory-delete-word)))
+              ("RET"   . vertico-directory-enter)
+              ("DEL"   . vertico-directory-delete-char)
+              ("M-DEL" . vertico-directory-delete-word)))
 
 (use-package marginalia
   :ensure t
+  :defer nil
   :config
   (marginalia-mode 1))
 
@@ -268,6 +269,7 @@
 
 (use-package rg
   :ensure t
+  :defer nil
   :config
   (rg-enable-default-bindings)
   (rg-enable-menu))
@@ -276,5 +278,17 @@
   :ensure t
   :custom
   (whole-line-or-region-global-mode t))
+
+(use-package mood-line
+  :ensure t
+  :defer nil
+  :config
+  (mood-line-mode)
+  :custom
+  (mood-line-glyph-alist mood-line-glyphs-fira-code)
+  :custom-face
+  (mood-line-unimportant ((t (:foreground "#cccccc" :weight normal))))
+  (eglot-mode-line ((t (:inherit mode-line :forground "#dddddd" :weight normal))))
+  (mode-line ((t (:box (:line-width 1 :color nil :style nil))))))
 
 ;;; init.el ends here
