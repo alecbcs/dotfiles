@@ -36,7 +36,7 @@
   (eglot-events-buffer-config '(:size 0))
   (eglot-report-progress nil)
   (eglot-send-changes-idle-time 5)
-  (eglot-ignore-server-capabilities '(:inlayHintProvider :signatureHelpProvider)))
+  (eglot-ignored-server-capabilities '(:inlayHintProvider :signatureHelpProvider)))
 
 (use-package flymake
   :ensure nil
@@ -60,7 +60,7 @@
 
 (use-package magit
   :ensure t
-  :defer nil)
+  :demand t)
 
 ;; ===========================================================================
 ;; Python

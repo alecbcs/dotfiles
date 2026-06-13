@@ -77,9 +77,6 @@
   ;; use custom file in emacs directory
   (custom-file (expand-file-name "custom.el" user-emacs-directory))
 
-  ;; enable visual line mode
-  (visual-line-mode 1)
-
   ;; enforce eldoc to only use a single line
   (eldoc-echo-area-use-multiline-p nil)
 
@@ -288,7 +285,7 @@
   (mood-line-glyph-alist mood-line-glyphs-fira-code)
   :custom-face
   (mood-line-unimportant ((t (:foreground "#cccccc" :weight normal))))
-  (eglot-mode-line ((t (:inherit mode-line :forground "#dddddd" :weight normal))))
+  (eglot-mode-line ((t (:inherit mode-line :foreground "#dddddd" :weight normal))))
   (mode-line ((t (:box (:line-width 1 :color nil :style nil))))))
 
 ;;; init.el ends here
