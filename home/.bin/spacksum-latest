@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-for pkg in "$@"; do
+for pkg in $@; do
     versions="$(spack versions -n $pkg)"
     latest_ver=$(echo $versions | grep -Eo '[0-9]{1,}.[0-9]{1,}.[0-9]{1,}' | head -n1)
 

@@ -29,30 +29,53 @@ fi
 # update spack
 #------------------------------------------------------------------------
 git fetch upstream
-
-current_branch=$(git -C ~/src/spack/spack rev-parse --abbrev-ref HEAD)
-if [[ "$current_branch" == "develop" ]]; then
-    git pull --rebase
+reslog=$(git log HEAD..upstream/develop --oneline)
+if [[ "${reslog}" != "" ]]; then
+    git pull
+else
+    echo "spack: already up-to-date"
 fi
 
 #------------------------------------------------------------------------
-# update spack builtin repo
+# update package repos
 #------------------------------------------------------------------------
+#------------------------------------------------------------------------
+# save existing repository state
+#------------------------------------------------------------------------
+cd $(spack location -P)
+packages_branch=$(git_branch)
+
+if [[ "$packages_branch" != "develop" ]]; then
+    if git diff; then
+        stashed=0
+        git stash
+    else
+        stashed=1
+    fi
+
+    git switch develop
+fi
+
 spack repo update
 
 #------------------------------------------------------------------------
 # reconcretize default as the base env
 #------------------------------------------------------------------------
-spack mark -i $(spack -e default find -H)
-spack -e default concretize -f --fresh-roots
+spack -e default concretize -Uf
 spack -e default install
-spack gc -by
 
 #------------------------------------------------------------------------
 # recompile emacs for compatibility
 #------------------------------------------------------------------------
-emacs --batch --load ~/.emacs.d/init.el --execute '(kill-emacs)'
-emacs --batch --load ~/.emacs.d/init.el --execute '(package-recompile-all)'
+emacs --batch \
+      --load ~/.emacs.d/early-init.el \
+      --load ~/.emacs.d/init.el \
+      --execute '(kill-emacs)'
+
+emacs --batch \
+      --load ~/.emacs.d/early-init.el \
+      --load ~/.emacs.d/init.el \
+      --execute '(package-recompile-all)'
 
 #------------------------------------------------------------------------
 # reconcretize project environments
@@ -72,6 +95,14 @@ spack gc -Eby
 #------------------------------------------------------------------------
 if [[ "$branch" != "develop" ]]; then
     git switch "$branch"
+    if $stashed; then
+        git stash apply
+    fi
+fi
+
+if [[ "$packages_branch" != "develop" ]]; then
+    cd $(spack location -P)
+    git switch "$packages_branch"
     if $stashed; then
         git stash apply
     fi

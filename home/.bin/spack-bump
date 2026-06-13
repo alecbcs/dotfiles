@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 set -e
 
-builtin=$(spack config get --json repos | jq .repos.builtin.destination | tr -d \")
-
-cd $builtin
+spack cd -p "$1"
 
 git switch -c "add/${1}-v${2}"
-git add "*${1}/package.py"
+pkgpy="${1//-/_}"
+
+git add "*${pkgpy}/package.py"
 git commit -m "${1}: add v${2}"
 git push --set-upstream origin "add/${1}-v${2}"
 gh --repo spack/spack-packages pr create --title "${1}: add v${2}" --body "${3}"

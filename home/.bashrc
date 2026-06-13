@@ -235,7 +235,7 @@ alias ls="ls $LS_OPTIONS"
 alias lst="ls -t $LS_OPTIONS"
 alias ll="ls -lh $LS_OPTIONS"
 alias llt="ls -lht $LS_OPTIONS"
-alias lsla="ls -la $LS_OPTIONS"
+alias lsla="ls -lah $LS_OPTIONS"
 
 #------------------------------------------------------------------------
 # ssh
