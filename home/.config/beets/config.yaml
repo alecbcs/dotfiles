@@ -1,0 +1,47 @@
+directory: ~/Downloads/imported-music
+
+plugins: musicbrainz fetchart embedart zero lastgenre ftintitle scrub titlecase
+
+import:
+  copy: yes
+  move: no
+  log: beetslog.txt
+
+paths:
+  default: %titlecase{$albumartist}/%titlecase{$album}/$track %titlecase{$title}
+  singleton: %titlecase{$artist}/%titlecase{$title}
+
+match:
+  strong_rec_thresh: 0.05
+
+fetchart:
+  cover_names: cover front album art
+  cautious: no
+  high_resolution: yes
+
+embedart:
+  ifempty: yes
+  compare_threshold: 0
+
+scrub:
+    auto: yes
+
+zero:
+  fields: copyright bpm comp encoder  mb_albumartistid mb_albumartistids mb_albumid mb_artistid mb_artistids mb_releasegroupid mb_releasetrackid mb_trackid mb_workid
+  update_database: true
+
+lastgenre:
+  count: 3
+
+titlecase:
+  auto: yes
+  all_caps: yes
+  all_lowercase: yes
+  replace:
+    - "’": "'"
+    - "‘": "'"
+    - "“": '"'
+    - "”": '"'
+
+ftintitle:
+  drop: yes
