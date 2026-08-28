@@ -1,26 +1,21 @@
-;;;; init.el -- personal main emacs config
+;;;; init-markdown.el -- markdown and web-mode config -*- lexical-binding: t -*-
 ;;;; Commentary:
 
-;; This code includes an opinionated setup for my customized version
-;; of markdown-mode.
+;; Configuration for Emacs's built-in tree-sitter Markdown mode.
 
 ;;;; Code:
-(use-package markdown-mode
-  :ensure t
-  :hook (markdown-mode . visual-line-mode)
-  :init
-  (setq markdown-enable-wiki-links t)
-  (setq markdown-link-space-sub-char "-")
-  (setq markdown-command "multimarkdown")
-  (setq markdown-header-scaling t)
-  (setq markdown-header-scaling-values '(2.0 1.7 1.4 1.1 1.0 1.0)))
+(use-package markdown-ts-mode
+  :ensure nil
+  :mode (("\\.md\\'" . markdown-ts-mode)
+         ("\\.markdown\\'" . markdown-ts-mode))
+  :hook (markdown-ts-mode . visual-line-mode))
 
 (use-package web-mode
   :ensure t
   :mode (("\\.html?\\'" . web-mode)
-     ("\\.css\\'"   . web-mode)
-     ("\\.jsx?\\'"  . web-mode)
-     ("\\.tsx?\\'"  . web-mode))
+         ("\\.css\\'"   . web-mode)
+         ("\\.jsx?\\'"  . web-mode)
+         ("\\.tsx?\\'"  . web-mode))
   :config
   (setq web-mode-markup-indent-offset 2) ; HTML
   (setq web-mode-css-indent-offset 2)    ; CSS

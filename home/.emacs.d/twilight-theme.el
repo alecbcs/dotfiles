@@ -1,4 +1,4 @@
-;; twilight-theme.el --- Twilight Color Theme for Emacs.
+;; ; twilight-theme.el --- Twilight color theme for Emacs -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2008 Marcus Crafter <crafterm@redartisan.com>
 ;; Copyright (C) 2015-2017 Jason Blevins <jrblevin@sdf.org>
@@ -69,7 +69,6 @@
       (tw-fg-c        "#cacaca")
       (tw-fg          "#d8d8d8")
       (tw-fg+1        "#e8e8e8")
-      (tw-fg+2        "#f8f8f8")
       (tw-wt          "#ffffff")
       (tw-rd-1        "#a3472c")
       (tw-rd          "#cf6a4c")
@@ -92,13 +91,12 @@
 
   (custom-theme-set-variables
    'twilight
-   '(frame-brackground-mode (quote dark)))
+   '(frame-brackground-mode 'dark))
 
   (custom-theme-set-faces
    'twilight
    `(default ((t (:background ,tw-bg :foreground ,tw-fg))))
    `(cursor ((t (:background ,tw-pale-org))))
-   `(buffers-tab ((t (:background ,tw-bg :foreground ,tw-fg-c))))
 
    `(font-lock-warning-face ((t (:background ,tw-mg :foreground ,tw-bg-2))))
    `(font-lock-builtin-face ((t (:foreground ,tw-pale-pur))))
@@ -116,33 +114,27 @@
    `(font-lock-warning-face ((t (:background ,tw-mg :foreground ,tw-mg-1))))
    `(font-lock-reference-face ((t (:inherit font-lock-constant-face)))) ; obsolete
    `(font-lock-regexp-grouping-backslash ((t (:foreground ,tw-light-org))))
-   `(font-lock-regexp-grouping-construct ((t (:foreground ,tw-mg-1))))
 
    `(minibuffer-prompt ((t (:foreground ,tw-bg+5))))
+   `(line-number ((t (:background ,tw-bg :foreground ,tw-bg+3))))
+   `(line-number-current-line ((t (:inherit line-number :foreground ,tw-pale-org))))
    `(fringe ((t (:background ,tw-bg :foreground ,tw-bg+8))))
-   `(linum ((t (:background ,tw-bg :foreground ,tw-bg+3))))
-   `(linum-highlight-face ((t (:inherit linum :foreground ,tw-pale-org))))
    `(hl-line ((t (:background ,tw-bg+2))))
    `(mode-line ((t (:background ,tw-bg+3 :foreground ,tw-fg-c
-                    :box (:line-width 1 :color ,tw-fg-c)))))
+                                :box (:line-width 1 :color ,tw-fg-c)))))
    `(mode-line-inactive ((t (:background ,tw-bg+4 :foreground ,tw-bg+8
-                    :box (:line-width 1 :color ,tw-bg+4)))))
+                                         :box (:line-width 1 :color ,tw-bg+4)))))
    `(mode-line-buffer-id ((t (:foreground ,tw-med-grn))))
-   `(gui-element ((t (:background ,tw-fg-d :foreground ,tw-bg-2))))
    `(region ((t (:background ,tw-bg+3))))
    `(shadow ((t (:foreground ,tw-bg+4))))
    `(highlight ((t (:foreground ,tw-pale-org :background ,tw-bg+2))))
-   `(highline-face ((t (:background ,tw-cy))))
    `(secondary-selection ((t (:background ,tw-blu-1))))
    `(link ((t :foreground ,tw-blu, :underline t)))
    `(link-visited ((t :foreground ,tw-blu-1, :underline t)))
    `(tooltip ((t (:background ,tw-fg-d :foreground ,tw-bg))))
    `(widget-field ((t (:background ,tw-bg+8))))
-   `(text-cursor ((t (:background ,tw-pale-org :foreground ,tw-bg-2))))
    `(escape-glyph ((t (:foreground ,tw-cy))))
    `(underline ((nil (:underline nil))))
-   `(yas/field-highlight-face ((t (:background ,tw-bg+2))))
-   `(mumamo-background-chunk-submode ((t (:background ,tw-bg+2))))
    `(trailing-whitespace ((t (:background ,tw-rd :foreground ,tw-fg))))
 
    ;; Ido

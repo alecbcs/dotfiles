@@ -1,4 +1,4 @@
-;;;; init.el -- personal main emacs config
+;;;; init.el -- personal main emacs config -*- lexical-binding: t -*-w
 ;;;; Commentary:
 
 ;; An opinionated setup for my customized version of Emacs.
@@ -9,6 +9,7 @@
 ;; General Options
 ;; ===========================================================================
 (use-package emacs
+  :ensure nil
   :config
   ;; no menu bar
   (menu-bar-mode -1)
@@ -40,9 +41,6 @@
           mac-option-modifier 'meta))
 
   :hook
-  ;; remove trailing whitespace
-  (before-save . delete-trailing-whitespace)
-
   ;; enable line numbers in programming modes
   (prog-mode . display-line-numbers-mode)
 
@@ -77,12 +75,6 @@
   ;; use custom file in emacs directory
   (custom-file (expand-file-name "custom.el" user-emacs-directory))
 
-  ;; enforce eldoc to only use a single line
-  (eldoc-echo-area-use-multiline-p nil)
-
-  ;; shorten the time to showing eldoc
-  (eldoc-idle-delay 0.2)
-
   ;; hide commands from M-x that aren't possible
   (read-extended-command-predicate #'command-completion-default-include-p)
 
@@ -110,9 +102,7 @@
 ;; ===========================================================================
 (require 'init-org)
 (require 'init-markdown)
-(require 'init-sidebar)
 (require 'init-prog-langs)
-(require 'init-podman)
 
 ;; ===========================================================================
 ;; Load Additional Packages
@@ -124,13 +114,15 @@
   (ignore-errors (xclip-mode 1)))
 
 (use-package flyspell
-  :ensure t
+  :ensure nil
   :bind (("C-\\" . save-word))
   :hook
   (text-mode . (lambda () (let ((inhibit-message t)) (flyspell-mode))))
   (prog-mode . (lambda () (let ((inhibit-message t)) (flyspell-prog-mode))))
+  :custom
+  (flyspell-delay-use-timer t)
+  (flyspell-issue-message-flag nil)
   :config
-  (setq flyspell-issue-message-flag nil)
   (defun save-word ()
     (interactive)
     (let ((current-location (point))
@@ -144,7 +136,7 @@
   :config (column-number-mode +1))
 
 (use-package savehist
-  :ensure t
+  :ensure nil
   :init
   (savehist-mode))
 
@@ -155,8 +147,21 @@
   (create-lockfiles nil ) ;; don't create .# files (crashes 'npm start')
   (make-backup-files nil))
 
+(use-package eldoc
+  :ensure nil
+  :custom
+  (eldoc-help-at-pt t)
+  (eldoc-echo-area-use-multiline-p nil)
+  (eldoc-idle-delay 0.2))
+
+(use-package whitespace
+  :ensure nil
+  :hook
+  (prog-mode . delete-trailing-whitespace-mode)
+  (text-mode . delete-trailing-whitespace-mode))
+
 (use-package autorevert
-  :ensure t
+  :ensure nil
   :config
   (global-auto-revert-mode +1)
   :custom
@@ -166,7 +171,7 @@
   (auto-revert-verbose nil))
 
 (use-package paren
-  :ensure t
+  :ensure nil
   :config
   (show-paren-mode +1)
   :custom
@@ -175,7 +180,7 @@
 (use-package olivetti
   :ensure t
   :hook
-  (markdown-mode . olivetti-mode)
+  (markdown-ts-mode . olivetti-mode)
   (org-mode . olivetti-mode)
   (rst-mode . olivetti-mode)
   :custom
@@ -231,6 +236,7 @@
    ("C-h B" . embark-bindings)))  ;; alternative for `describe-bindings`
 
 (use-package embark-consult
+  :defer nil
   :after (embark consult)
   :ensure t)
 
@@ -246,14 +252,6 @@
   (tab-always-indent 'complete)
   :config
   (global-corfu-mode))
-
-(use-package corfu-terminal
-  :ensure t
-  :after corfu
-  :defer nil
-  :config
-  ;; use corfu-terminal when not running as graphical emacs
-  (unless (display-graphic-p) (corfu-terminal-mode +1)))
 
 (use-package cape
   :ensure t

@@ -1,4 +1,4 @@
-;;;; early-init.el -- early startup optimizations
+;;;; early-init.el -- early startup optimizations -*- lexical-binding: t -*-w
 ;;;; Commentary:
 ;;
 ;; Early initialization file for performance optimization.
@@ -6,17 +6,6 @@
 ;; and GUI are initialized.
 ;;
 ;;;; Code:
-
-;; ===========================================================================
-;; Garbage Collection Optimization
-;; ===========================================================================
-;; Defer garbage collection during startup for faster load times
-(setq gc-cons-threshold most-positive-fixnum)
-
-;; Restore garbage collection settings after startup
-(add-hook 'emacs-startup-hook
-  (lambda ()
-    (setq gc-cons-threshold 16777216))) ; 16MB
 
 ;; ===========================================================================
 ;; Package System
@@ -41,25 +30,12 @@
 (push '(vertical-scroll-bars) default-frame-alist)
 
 ;; ===========================================================================
-;; File Handler Optimization
-;; ===========================================================================
-;; Reduce file-name-handler-alist during startup for faster file operations
-(defvar file-name-handler-alist-original file-name-handler-alist)
-(setq file-name-handler-alist nil)
-
-;; Restore file handlers after startup
-(add-hook 'emacs-startup-hook
-  (lambda ()
-    (setq file-name-handler-alist
-          (delete-dups
-           (append file-name-handler-alist file-name-handler-alist-original)))))
-
-;; ===========================================================================
 ;; Native Compilation (Emacs 28+)
 ;; ===========================================================================
 ;; Configure native compilation if available
 (when (native-comp-available-p)
-  (setq native-comp-async-report-warnings-errors nil)
-  (setq native-comp-deferred-compilation t))
+  (setopt native-comp-jit-compilation t
+          native-comp-async-report-warnings-errors 'silent
+          native-comp-async-on-battery-power nil))
 
 ;;; early-init.el ends here

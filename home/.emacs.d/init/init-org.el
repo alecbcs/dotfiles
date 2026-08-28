@@ -6,7 +6,7 @@
 
 ;;; Code:
 (use-package org
-  :ensure t
+  :ensure nil
   :hook
   (org-mode . visual-line-mode)
   (org-mode . org-indent-mode)
@@ -20,7 +20,7 @@
   (setq org-html-validation-link nil)
   (setq org-export-kill-product-buffer-when-displayed t)
   (setq org-tags-column 80)
-    (org-babel-do-load-languages
+  (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
      (python . t)

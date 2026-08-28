@@ -1,7 +1,7 @@
-;;;; init-prog-langs.el -- preferences for configuring programming modes
+;;;; init-prog-langs.el -- preferences for configuring programming modes -*- lexical-binding: t -*-
 ;;;; Commentary:
 
-;; An opinionated setup for my customized version of Emacs.
+;; An opinionated setup for my customized programming tools.
 
 ;;;; Code:
 ;; ===========================================================================
@@ -11,11 +11,8 @@
   :ensure nil
   :when (treesit-available-p)
   :custom
-  (major-mode-remap-alist
-   '((go-mode . go-ts-mode)
-     (json-mode . json-ts-mode)
-     (python-mode . python-ts-mode)
-     (rust-mode . rust-ts-mode))))
+  (treesit-enabled-modes t)
+  (treesit-auto-install-grammar 'always))
 
 (use-package envrc
   :ensure t
@@ -24,7 +21,9 @@
   (envrc-global-mode))
 
 (use-package eglot
-  :ensure t
+  :ensure nil
+  :init
+  (setq eglot-max-file-watches 4096)
   :config
   (remove-hook 'jsonrpc-event-hook #'jsonrpc--log-event)
   (add-to-list 'eglot-server-programs
@@ -33,6 +32,7 @@
   :hook
   (eglot-managed-mode . eglot-ensure)
   :custom
+  (eglot-code-action-indications nil)
   (eglot-events-buffer-config '(:size 0))
   (eglot-report-progress nil)
   (eglot-send-changes-idle-time 5)
@@ -40,6 +40,8 @@
 
 (use-package flymake
   :ensure nil
+  :custom
+  (flymake-indicator-type 'margins)
   :hook
   (prog-mode . flymake-mode)
   (flymake-mode . (lambda ()
@@ -50,7 +52,7 @@
 
 (use-package apheleia
   :ensure t
-  :demand t
+  :defer nil
   :config
   (setf (alist-get 'python-mode apheleia-mode-alist)
         '(ruff-isort ruff))
@@ -60,7 +62,7 @@
 
 (use-package magit
   :ensure t
-  :demand t)
+  :defer nil)
 
 ;; ===========================================================================
 ;; Python
