@@ -1,9 +1,7 @@
-;;;; early-init.el -- early startup optimizations -*- lexical-binding: t -*-w
+;;;; early-init.el -- early startup optimizations -*- lexical-binding: t -*-
 ;;;; Commentary:
 ;;
-;; Early initialization file for performance optimization.
-;; This file is loaded before init.el and before the package system
-;; and GUI are initialized.
+;; Configuration that must run before package and GUI initialization.
 ;;
 ;;;; Code:
 

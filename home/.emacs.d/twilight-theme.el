@@ -91,7 +91,7 @@
 
   (custom-theme-set-variables
    'twilight
-   '(frame-brackground-mode 'dark))
+   '(frame-background-mode 'dark))
 
   (custom-theme-set-faces
    'twilight
@@ -112,8 +112,8 @@
    `(font-lock-type-face ((t (:foreground ,tw-pale-pur))))
    `(font-lock-variable-name-face ((t (:foreground ,tw-blu))))
    `(font-lock-warning-face ((t (:background ,tw-mg :foreground ,tw-mg-1))))
-   `(font-lock-reference-face ((t (:inherit font-lock-constant-face)))) ; obsolete
    `(font-lock-regexp-grouping-backslash ((t (:foreground ,tw-light-org))))
+   `(font-lock-regexp-grouping-construct ((t (:foreground ,tw-mg-1))))
 
    `(minibuffer-prompt ((t (:foreground ,tw-bg+5))))
    `(line-number ((t (:background ,tw-bg :foreground ,tw-bg+3))))

@@ -7,10 +7,11 @@ spack:
   specs:
   - aspell
   - aspell6-en
+  - bat
   - coreutils
   - difftastic
   - direnv
-  - emacs+native+treesitter+json
+  - emacs+treesitter
   - fd
   - fzf
   - gh
@@ -22,9 +23,9 @@ spack:
   - ncdu
   - pass
   - py-pip
-  - py-python-lsp-ruff
-  - py-python-lsp-server
+  - py-rassumfrassum
   - py-ruff
+  - py-ty
   - python
   - rclone
   - restic

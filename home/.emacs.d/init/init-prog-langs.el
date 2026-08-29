@@ -79,7 +79,7 @@
 (use-package go-mode
   :ensure t
   :custom
-  (go-ts-mode-indent-offset 4)
+  (go-ts-indent-offset 4)
   (go-mode-indent-offset 4)
   :hook
   (go-mode . eglot-ensure)

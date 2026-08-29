@@ -1,4 +1,4 @@
-;;;; init.el -- personal main emacs config -*- lexical-binding: t -*-w
+;;;; init.el -- personal main emacs config -*- lexical-binding: t -*-
 ;;;; Commentary:
 
 ;; An opinionated setup for my customized version of Emacs.
@@ -52,6 +52,9 @@
   (scroll-step 1)
   (scroll-conservatively 10000)
 
+  ;; disable xterm-mouse-mode
+  (xterm-mouse-mode nil)
+
   ;; default to text-mode instead of fundamental mode
   (major-mode 'text-mode)
 
@@ -86,7 +89,7 @@
    '(read-only t cursor-intangible t face minibuffer-prompt)))
 
 ;; ===========================================================================
-;; Optimize Emacs's garbage collector for better performance
+;; Run garbage collection while Emacs is idle
 ;; ===========================================================================
 (use-package gcmh
   :ensure t
@@ -236,7 +239,6 @@
    ("C-h B" . embark-bindings)))  ;; alternative for `describe-bindings`
 
 (use-package embark-consult
-  :defer nil
   :after (embark consult)
   :ensure t)
 
