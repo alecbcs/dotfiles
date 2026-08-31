@@ -80,3 +80,6 @@
 
 [commit]
     gpgsign = true
+
+[branch]
+	sort = -committerdate
